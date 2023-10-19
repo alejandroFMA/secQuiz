@@ -2,7 +2,7 @@ console.log("Hola :D")
 
 const api = 'https://opentdb.com/api.php?amount=10&category=14&difficulty=medium&type=multiple' //api en variable para trabajar más simple
 
-const preguntas = [] //guardamos objetos en un array
+const preguntas = [] 
 const correctas =[]
 const mezcladas = []
 
@@ -33,15 +33,15 @@ async function getQuiz() {
     console.log(mezcladas)
 
 
-
     for (let i = 0; i < preguntas.length; i++) {
 
         let rnd = caos(numbers)
+  
     
         let template = document.getElementById("form") 
-        
-         template.innerHTML += 
-        `<fieldset>
+
+         template.innerHTML+= 
+        `<fieldset id="${i}">
             <legend>${preguntas[i]}</legend>
             <div>
                 <label for="${mezcladas[i][rnd[0]]}">${mezcladas[i][rnd[0]]}</label>
@@ -59,18 +59,73 @@ async function getQuiz() {
                 <label for="${mezcladas[i][rnd[3]]}">${mezcladas[i][rnd[3]]}</label>
                 <input type="radio" name="${mezcladas[i][rnd[3]]}" value="${mezcladas[i][rnd[3]]}">
             </div>
-        </fieldset>
-        ` 
+        </fieldset>` 
     
-    
+      
+      }
+
+  
+}
+getQuiz();
+
+
+
+
+/* showQuiz(); 
+}
+
+function showQuiz() {
+    if (preguntaPantalla < preguntas.length) {
+        let rnd = caos(numbers);
+
+        let template = document.getElementById("form");
+        template.innerHTML = `
+            <fieldset id="${preguntaPantalla}">
+                <legend>${preguntas[preguntaPantalla]}</legend>
+                <div>
+                    <label for="${mezcladas[preguntaPantalla][rnd[0]]}">${mezcladas[preguntaPantalla][rnd[0]]}</label>
+                    <input type="radio" name="answer" value="${mezcladas[preguntaPantalla][rnd[0]]}">
+                </div>
+                <div>
+                    <label for="${mezcladas[preguntaPantalla][rnd[1]]}">${mezcladas[preguntaPantalla][rnd[1]]}</label>
+                    <input type="radio" name="answer" value="${mezcladas[preguntaPantalla][rnd[1]]}">
+                </div>
+                <div>
+                    <label for="${mezcladas[preguntaPantalla][rnd[2]]}">${mezcladas[preguntaPantalla][rnd[2]]}</label>
+                    <input type="radio" name="answer" value="${mezcladas[preguntaPantalla][rnd[2]]}">
+                </div>
+                <div>
+                    <label for="${mezcladas[preguntaPantalla][rnd[3]]}">${mezcladas[preguntaPantalla][rnd[3]]}</label>
+                    <input type="radio" name="answer" value="${mezcladas[preguntaPantalla][rnd[3]]}">
+                </div>
+            </fieldset>
+        `;
+
+        if (preguntaPantalla === 0) {
+            // Si es la primera pregunta, oculta el botón "Prev"
+            document.getElementById("prevButton").style.display = "none";
+        } else {
+            document.getElementById("prevButton").style.display = "inline-block";
+        }
+
+        if (preguntaPantalla === preguntas.length - 1) {
+            // Si es la última pregunta, cambia el texto del botón "Next" a "Submit"
+            document.getElementById("nextButton").textContent = "Submit";
+        } else {
+            document.getElementById("nextButton").textContent = "Next";
+        }
     }
-    
+}
 
-
-
-    
+function nextPregunta() {
+  preguntaPantalla++;
+    showQuiz();
 }
 
 
 getQuiz();
+
+document.getElementById("next").addEventListener("click", nextPregunta);
+
+*/
 

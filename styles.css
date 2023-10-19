@@ -1,3 +1,14 @@
 body{
     background-color: darksalmon;
 }
+
+fieldset{
+    background-color: white;
+    margin: auto 0;
+    border-radius: 5%;
+    border: 1px solid black;
+}
+
+legend{
+    background-color: white;
+}
