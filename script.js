@@ -1,6 +1,6 @@
-const api = 'https://opentdb.com/api.php?amount=10&category=14&difficulty=medium&type=multiple' //api en variable para trabajar más simple
+const api = 'https://opentdb.com/api.php?amount=10&category=14&difficulty=medium&type=multiple' 
 
-const preguntas = [] //guardamos objetos en un array
+const preguntas = [] 
 const correctas =[]
 const mezcladas = []
 
@@ -17,9 +17,9 @@ async function getQuiz() {
     let response = await fetch(api);
     let data = await response.json();
 
-    for(let i=0; i< data.results.length; i++){     //bucle de objetos
+    for(let i=0; i< data.results.length; i++){     
       
-        preguntas.push(data.results[i].question)                          //creamos objeto de la estructura de las preguntas
+        preguntas.push(data.results[i].question)                         
     
        correctas.push(data.results[i].correct_answer)
        
@@ -29,7 +29,6 @@ async function getQuiz() {
     }
 
     console.log(mezcladas)
-
 
 
     for (let i = 0; i < preguntas.length; i++) {
@@ -59,10 +58,8 @@ async function getQuiz() {
             </div>
         </fieldset>
         ` 
-    
-    
+ 
     }
-    
     
 }
 
