@@ -13,7 +13,9 @@ const api = 'https://opentdb.com/api.php?amount=10&category=14&difficulty=medium
 const preguntas = [] 
 const correctas =[]
 const mezcladas = []
-
+let i = 0;
+let score = 0;
+let alerta = 0;
 let numbers = [0,1,2,3]
 
 function caos(array) {
@@ -23,26 +25,26 @@ function caos(array) {
 
 function pintar(pregunta, mezcladas, i){
     let rnd = caos(numbers)
-    let template = document.getElementById("section") 
+    let template = document.getElementById("form") 
     
      template.innerHTML = 
     `<fieldset class="field hide" id="${[i]}">
         <legend>${pregunta}</legend>
         <div>
             <label for="a${i}">${mezcladas[rnd[0]]}</label>
-            <input type="radio" name="${pregunta}" value="${mezcladas[rnd[0]]}" id= "a${i}"  required>
+            <input type="radio" name="n${i}" value="${mezcladas[rnd[0]]}" id= "a${i}"  required>
         </div>
         <div>
             <label for="b${i}">${mezcladas[rnd[1]]}</label>
-            <input type="radio" name="${pregunta}" value="${mezcladas[rnd[1]]}" id= "b${i}"  required>
+            <input type="radio" name="n${i}" value="${mezcladas[rnd[1]]}" id= "b${i}"  required>
         </div>
         <div>
             <label for="c${i}">${mezcladas[rnd[2]]}</label>
-            <input type="radio" name="${pregunta}" value="${mezcladas[rnd[2]]}" id= "c${i}"  required>
+            <input type="radio" name="n${i}" value="${mezcladas[rnd[2]]}" id= "c${i}"  required>
         </div>
         <div>
             <label for="d${i}">${mezcladas[rnd[3]]}</label>
-            <input type="radio" name="${pregunta}" value="${mezcladas[rnd[3]]}" id= "d${i}"  required>
+            <input type="radio" name="n${i}" value="${mezcladas[rnd[3]]}" id= "d${i}"  required>
         </div>
     </fieldset>
     <button id="next">NEXT</button>
@@ -66,7 +68,9 @@ async function getQuiz() {
         mezcladas.push(data.results[i].incorrect_answers.concat(data.results[i].correct_answer))    
         
     }
-    let i = 0
+
+    console.log(correctas);
+
       pintar(preguntas[i], mezcladas[i], i)  
     }
     
@@ -74,30 +78,31 @@ getQuiz();
 
 //validación
 
-function comprobar(event){
-    event.preventDefault();
-    console.log(event)
-   
-console.log("Holaaa")
-    const respuestaUsuario = document.querySelectorAll("input:checked").nodeValue
-    let alerta ="";
-    let score = 0
+    function comprobar(event){
+        event.preventDefault();
+        const respuestaUsuario = document.querySelector(`input[name=n${i}]:checked`).value
+        console.log(respuestaUsuario)
 
-    for (let i = 0; i < preguntas.length; i++) {
-       
-        if(respuestaUsuario[i] != correctas[i]){
-            alerta+="Respuesta incorrecta!";
-        } else if(respuestaUsuario[i].nodeValue == correctas[i]){
+        if (respuestaUsuario == correctas[i]){
             score++
-        }  
-    }
+        } else if (respuestaUsuario != correctas[i]){
+            alerta++
+        }
+        console.log("alerta = "+alerta)
+        console.log("score = "+score)
+        console.log("index = "+i);
 
-    console.log(alerta)
-    console.log(score)
+        i++
+        
+        pintar(preguntas[i], mezcladas[i], i)
+        console.log("nuevo index =" + i)
+
 }
 
+       
 
-document.querySelector("#form").addEventListener("submit", comprobar)
+
+//document.querySelector("#form").addEventListener("submit", comprobar)
 
 
 //pintarUsuarios(usuarios);
