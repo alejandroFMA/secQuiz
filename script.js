@@ -1,6 +1,21 @@
-console.log("Hola :D")
 
-const api = 'https://opentdb.com/api.php?amount=10&category=14&difficulty=medium&type=multiple' //api en variable para trabajar más simple
+const firebaseConfig = {
+    apiKey: "AIzaSyDXwc-XRYEeU4XRDcf21IJy9oPdmJ24eWs",
+    authDomain: "telequiz-cb0e4.firebaseapp.com",
+    projectId: "telequiz-cb0e4",
+    storageBucket: "telequiz-cb0e4.appspot.com",
+    messagingSenderId: "911800771479",
+    appId: "1:911800771479:web:d1bce9392241d007451ad2"
+
+};
+
+
+firebase.initializeApp(firebaseConfig);
+  
+const db = firebase.firestore();
+
+
+const api = 'https://opentdb.com/api.php?amount=10&category=14&difficulty=medium&type=multiple' 
 
 const preguntas = [] 
 const correctas =[]
@@ -13,15 +28,15 @@ function caos(array) {
     return array
     
   }
- 
+
 async function getQuiz() {
 
     let response = await fetch(api);
     let data = await response.json();
 
-    for(let i=0; i< data.results.length; i++){     //bucle de objetos
+    for(let i=0; i< data.results.length; i++){     
       
-        preguntas.push(data.results[i].question)                          //creamos objeto de la estructura de las preguntas
+        preguntas.push(data.results[i].question)                         
     
        correctas.push(data.results[i].correct_answer)
        
@@ -36,95 +51,88 @@ async function getQuiz() {
     for (let i = 0; i < preguntas.length; i++) {
 
         let rnd = caos(numbers)
-  
     
         let template = document.getElementById("form") 
-
-         template.innerHTML+= 
-        `<fieldset id="${i}">
+        
+         template.innerHTML += 
+        `<fieldset class="field hide" id="${[i]}">
             <legend>${preguntas[i]}</legend>
             <div>
                 <label for="${mezcladas[i][rnd[0]]}">${mezcladas[i][rnd[0]]}</label>
-                <input type="radio" name="${mezcladas[i][rnd[0]]}" value="${mezcladas[i][rnd[0]]}">
+                <input type="radio" name="${[i]}" value="${mezcladas[i][rnd[0]]}">
             </div>
             <div>
                 <label for="${mezcladas[i][rnd[1]]}">${mezcladas[i][rnd[1]]}</label>
-                <input type="radio" name="${mezcladas[i][rnd[1]]}" value="${mezcladas[i][rnd[1]]}">
+                <input type="radio" name="${[i]}" value="${mezcladas[i][rnd[1]]}">
             </div>
             <div>
                 <label for="${mezcladas[i][rnd[2]]}">${mezcladas[i][rnd[2]]}</label>
-                <input type="radio" name="${mezcladas[i][rnd[2]]}" value="${mezcladas[i][rnd[2]]}">
+                <input type="radio" name="${[i]}" value="${mezcladas[i][rnd[2]]}">
             </div>
             <div>
                 <label for="${mezcladas[i][rnd[3]]}">${mezcladas[i][rnd[3]]}</label>
-                <input type="radio" name="${mezcladas[i][rnd[3]]}" value="${mezcladas[i][rnd[3]]}">
+                <input type="radio" name="${[i]}" value="${mezcladas[i][rnd[3]]}">
             </div>
-        </fieldset>` 
-    
-      
-      }
-  
-}
-getQuiz();
-
-
-
-
-/* showQuiz(); 
-}
-
-function showQuiz() {
-    if (preguntaPantalla < preguntas.length) {
-        let rnd = caos(numbers);
-
-        let template = document.getElementById("form");
-        template.innerHTML = `
-            <fieldset id="${preguntaPantalla}">
-                <legend>${preguntas[preguntaPantalla]}</legend>
-                <div>
-                    <label for="${mezcladas[preguntaPantalla][rnd[0]]}">${mezcladas[preguntaPantalla][rnd[0]]}</label>
-                    <input type="radio" name="answer" value="${mezcladas[preguntaPantalla][rnd[0]]}">
-                </div>
-                <div>
-                    <label for="${mezcladas[preguntaPantalla][rnd[1]]}">${mezcladas[preguntaPantalla][rnd[1]]}</label>
-                    <input type="radio" name="answer" value="${mezcladas[preguntaPantalla][rnd[1]]}">
-                </div>
-                <div>
-                    <label for="${mezcladas[preguntaPantalla][rnd[2]]}">${mezcladas[preguntaPantalla][rnd[2]]}</label>
-                    <input type="radio" name="answer" value="${mezcladas[preguntaPantalla][rnd[2]]}">
-                </div>
-                <div>
-                    <label for="${mezcladas[preguntaPantalla][rnd[3]]}">${mezcladas[preguntaPantalla][rnd[3]]}</label>
-                    <input type="radio" name="answer" value="${mezcladas[preguntaPantalla][rnd[3]]}">
-                </div>
-            </fieldset>
-        `;
-
-        if (preguntaPantalla === 0) {
-            // Si es la primera pregunta, oculta el botón "Prev"
-            document.getElementById("prevButton").style.display = "none";
-        } else {
-            document.getElementById("prevButton").style.display = "inline-block";
-        }
-
-        if (preguntaPantalla === preguntas.length - 1) {
-            // Si es la última pregunta, cambia el texto del botón "Next" a "Submit"
-            document.getElementById("nextButton").textContent = "Submit";
-        } else {
-            document.getElementById("nextButton").textContent = "Next";
-        }
+        </fieldset>
+        ` 
     }
-}
 
-function nextPregunta() {
-  preguntaPantalla++;
-    showQuiz();
-}
 
+    let submit = document.createElement("button")
+    submit.setAttribute("type", "submit")
+    submit.innerText = "Submit"
+    document.getElementById("form").appendChild(submit)
+    
+}
 
 getQuiz();
 
-document.getElementById("next").addEventListener("click", nextPregunta);
 
-*/
+
+// AUTH
+
+
+let loginUsuario =document.getElementById("login")
+
+
+loginUsuario.addEventListener("submit", function(event) {
+  event.preventDefault();
+  
+  const email = event.target.email.value;
+  const pass = event.target.pass.value;
+  const pass2 = event.target.comments.value;
+
+  let coleccionUsuarios ={
+      mail:email,
+      pass: pass,
+      pass2: pass2 
+   
+    }
+
+
+     document.getElementById("login").addEventListener("click", function (event) {
+        event.preventDefault();
+        let email = event.target.elements.email.value;
+        let pass = event.target.elements.pass.value;
+        let pass2 = event.target.elements.pass2.value;
+      
+        pass === pass2 ? signUpUser(email, pass) : alert("error password");
+      })
+
+
+
+const crearUser = (coleccionUsuarios) => {
+    db.collection("datos")
+      .add(coleccionUsuarios)
+      .then((docRef) => {
+        console.log("Document written with ID: ", docRef.id)
+      })
+      .catch((error) => console.error("Error adding document: ", error));
+
+
+    }
+    
+  
+crearUser(coleccionUsuarios);
+})
 
