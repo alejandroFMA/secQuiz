@@ -15,124 +15,137 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 
-const api = 'https://opentdb.com/api.php?amount=10&category=14&difficulty=medium&type=multiple' 
+// const api = 'https://opentdb.com/api.php?amount=10&category=14&difficulty=medium&type=multiple' 
 
-const preguntas = [] 
-const correctas =[]
-const mezcladas = []
+// const preguntas = [] 
+// const correctas =[]
+// const mezcladas = []
 
-let numbers = [0,1,2,3]
+// let numbers = [0,1,2,3]
 
-function caos(array) {
-    array.sort(() => Math.random() - 0.5);
-    return array
+// function caos(array) {
+//     array.sort(() => Math.random() - 0.5);
+//     return array
     
-  }
+//   }
 
-async function getQuiz() {
+// async function getQuiz() {
 
-    let response = await fetch(api);
-    let data = await response.json();
+//     let response = await fetch(api);
+//     let data = await response.json();
 
-    for(let i=0; i< data.results.length; i++){     
+//     for(let i=0; i< data.results.length; i++){     
       
-        preguntas.push(data.results[i].question)                         
+//         preguntas.push(data.results[i].question)                         
     
-       correctas.push(data.results[i].correct_answer)
+//        correctas.push(data.results[i].correct_answer)
        
 
-        mezcladas.push(data.results[i].incorrect_answers.concat(data.results[i].correct_answer))    
+//         mezcladas.push(data.results[i].incorrect_answers.concat(data.results[i].correct_answer))    
         
-    }
+//     }
 
-    console.log(mezcladas)
+//     console.log(mezcladas)
 
 
-    for (let i = 0; i < preguntas.length; i++) {
+//     for (let i = 0; i < preguntas.length; i++) {
 
-        let rnd = caos(numbers)
+//         let rnd = caos(numbers)
     
-        let template = document.getElementById("form") 
+//         let template = document.getElementById("form") 
         
-         template.innerHTML += 
-        `<fieldset class="field hide" id="${[i]}">
-            <legend>${preguntas[i]}</legend>
-            <div>
-                <label for="${mezcladas[i][rnd[0]]}">${mezcladas[i][rnd[0]]}</label>
-                <input type="radio" name="${[i]}" value="${mezcladas[i][rnd[0]]}">
-            </div>
-            <div>
-                <label for="${mezcladas[i][rnd[1]]}">${mezcladas[i][rnd[1]]}</label>
-                <input type="radio" name="${[i]}" value="${mezcladas[i][rnd[1]]}">
-            </div>
-            <div>
-                <label for="${mezcladas[i][rnd[2]]}">${mezcladas[i][rnd[2]]}</label>
-                <input type="radio" name="${[i]}" value="${mezcladas[i][rnd[2]]}">
-            </div>
-            <div>
-                <label for="${mezcladas[i][rnd[3]]}">${mezcladas[i][rnd[3]]}</label>
-                <input type="radio" name="${[i]}" value="${mezcladas[i][rnd[3]]}">
-            </div>
-        </fieldset>
-        ` 
-    }
+//          template.innerHTML += 
+//         `<fieldset class="field hide" id="${[i]}">
+//             <legend>${preguntas[i]}</legend>
+//             <div>
+//                 <label for="${mezcladas[i][rnd[0]]}">${mezcladas[i][rnd[0]]}</label>
+//                 <input type="radio" name="${[i]}" value="${mezcladas[i][rnd[0]]}">
+//             </div>
+//             <div>
+//                 <label for="${mezcladas[i][rnd[1]]}">${mezcladas[i][rnd[1]]}</label>
+//                 <input type="radio" name="${[i]}" value="${mezcladas[i][rnd[1]]}">
+//             </div>
+//             <div>
+//                 <label for="${mezcladas[i][rnd[2]]}">${mezcladas[i][rnd[2]]}</label>
+//                 <input type="radio" name="${[i]}" value="${mezcladas[i][rnd[2]]}">
+//             </div>
+//             <div>
+//                 <label for="${mezcladas[i][rnd[3]]}">${mezcladas[i][rnd[3]]}</label>
+//                 <input type="radio" name="${[i]}" value="${mezcladas[i][rnd[3]]}">
+//             </div>
+//         </fieldset>
+//         ` 
+//     }
 
 
-    let submit = document.createElement("button")
-    submit.setAttribute("type", "submit")
-    submit.innerText = "Submit"
-    document.getElementById("form").appendChild(submit)
+//     let submit = document.createElement("button")
+//     submit.setAttribute("type", "submit")
+//     submit.innerText = "Submit"
+//     document.getElementById("form").appendChild(submit)
     
-}
+// }
 
-getQuiz();
-
-
-
-// AUTH
+// getQuiz();
 
 
-let loginUsuario =document.getElementById("login")
+//AUTH
 
-
-loginUsuario.addEventListener("submit", function(event) {
-  event.preventDefault();
-  
-  const email = event.target.email.value;
-  const pass = event.target.pass.value;
-  const pass2 = event.target.comments.value;
-
-  let coleccionUsuarios ={
-      mail:email,
-      pass: pass,
-      pass2: pass2 
-   
-    }
-
-
-     document.getElementById("login").addEventListener("click", function (event) {
-        event.preventDefault();
-        let email = event.target.elements.email.value;
-        let pass = event.target.elements.pass.value;
-        let pass2 = event.target.elements.pass2.value;
-      
-        pass === pass2 ? signUpUser(email, pass) : alert("error password");
-      })
-
-
-
-const crearUser = (coleccionUsuarios) => {
-    db.collection("datos")
-      .add(coleccionUsuarios)
-      .then((docRef) => {
-        console.log("Document written with ID: ", docRef.id)
-      })
+const createUser = (user) => {
+    db.collection("users")
+      .add(user)
+      .then((docRef) => console.log("Document written with ID: ", docRef.id))
       .catch((error) => console.error("Error adding document: ", error));
-
-
-    }
-    
+};
   
-crearUser(coleccionUsuarios);
-})
+const signUpUser = (email, password) => {
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        let user = userCredential.user;
+        console.log(`se ha registrado ${user.email} ID:${user.uid}`)
+        alert(`La cuenta de ${user.email} ha sido registrada con éxito`)
+        createUser({
+          email: user.email,
+          password: password
+        });
+  
+      })
+      .catch((error) => {
+        console.log("Error en el sistema" + error.message, "Error: "+error.code);
+        if (error.code === "auth/email-already-in-use") {
+          alert("El correo electrónico ya está en uso. Por favor, inicia sesión en lugar de registrarte.");
+      } else {
+          alert("No se pudo crear el usuario. Revisa los datos.");
+      }
+  });
+}
+  
+  document.getElementById("crear").addEventListener("submit", function (event) {
+    event.preventDefault();
+    let email = event.target.elements.email.value;
+    let pass = event.target.elements.pass.value;
+    let pass2 = event.target.elements.pass2.value;
+  
+    pass === pass2 ? signUpUser(email, pass) : alert("error password");
+  })
+  
 
+  
+const signInUser = (email, password) => {
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Signed in
+        let user = userCredential.user;
+        console.log(`se ha logado ${user.email} ID:${user.uid}`)
+        alert(`se ha logado ${user.email} ID:${user.uid}`)
+        console.log("USER", user);
+      })
+      .catch((error) => {
+        let errorCode = error.code;
+        let errorMessage = error.message;
+        console.log(errorCode)
+        console.log(errorMessage)
+      });
+  }
+  
