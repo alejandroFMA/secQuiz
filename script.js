@@ -48,9 +48,15 @@ function pintar(pregunta, mezcladas, i){
         </div>
     </fieldset>
     <button id="next">NEXT</button>
+    <input type="submit" id="submit" value="Finish quiz"></input>
     ` 
+    if(i<9){
+        document.getElementById("submit").style.display = "none"
+    }
+  
+    document.querySelector("#next").addEventListener("click", comprobarYPasar);
 
-    document.querySelector("#next").addEventListener("click", comprobar)
+    document.querySelector("#submit").addEventListener("submit", validar)
 }
 
 
@@ -72,16 +78,17 @@ async function getQuiz() {
     console.log(correctas);
 
       pintar(preguntas[i], mezcladas[i], i)  
+      
     }
     
 getQuiz();
 
 //validación
 
-    function comprobar(event){
+    function comprobarYPasar(event){
         event.preventDefault();
         const respuestaUsuario = document.querySelector(`input[name=n${i}]:checked`).value
-        console.log(respuestaUsuario)
+        console.log("respuestaUsuario es " + respuestaUsuario)
 
         if (respuestaUsuario == correctas[i]){
             score++
@@ -97,9 +104,14 @@ getQuiz();
         pintar(preguntas[i], mezcladas[i], i)
         console.log("nuevo index =" + i)
 
+        if(i==9){
+            document.querySelector("#next").remove()
+        }
 }
 
-       
+  function validar(event){
+    
+  }     
 
 
 //document.querySelector("#form").addEventListener("submit", comprobar)
