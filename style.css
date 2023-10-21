@@ -1,7 +1,24 @@
+*{
+    box-sizing: border-box;
+}
+  
+html {
+      scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Pixelify Sans';
+    font-size: 22px;
+    background-color: black;
+    
+}
+
+
 header{
     width: 80%;
     text-align: center;
     margin: auto;
+    
 }
 
 main{
@@ -12,35 +29,42 @@ main{
     justify-content: center;
 }
 
-form{
+#quiz{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
 }
 
-fieldset{
+fieldset.question{
     margin: 10px auto;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
     width: 80vw;
     height: 50vh;
+    border: dashed 2px magenta;
 }
 
-div{
+div.form{
     flex: 50%;
     max-width: 40%;
     padding: 0.68em;
     margin: 0.45em;
-    border: black solid 1px;
+    border: red dashed 1px;
 }
 
 button{
-    background-color: #ADD7C6;
+    color: greenyellow;
     padding: 0.45em;
     margin :0.45em;
     border-radius: 0.25em;
     font-size: large;
+    font-family: 'Pixelify Sans';
+    background-color: black;
+}
+
+button:active{
+    background-color: magenta;;
 }
 
 #submit{
@@ -49,4 +73,59 @@ button{
     margin :0.45em;
     border-radius: 0.25em;
     font-size: large;
+}
+
+
+#inicio{
+    display:block;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100vw;
+}
+
+h2{
+    color: #ff00ff;
+    text-align: center;
+}
+
+h3{
+    text-align: center;
+    color: #00ffff;
+}
+
+#form1, #form2{
+    text-align: center;
+    padding: 20px 50px;
+    margin: 20px auto;
+    width: 50%;
+}
+
+#form1 > fieldset, #form2 > fieldset{
+    border: dashed 2px rgb(9, 232, 9);
+    padding: 50px 70px;
+}
+
+#salir{
+    text-align: center;
+}
+
+label{
+    color: white;
+}
+
+#log, #create, #finish{
+    color: yellow;
+    background-color: black;
+    border: none;
+    padding: 10px;
+    font-size: large;
+    font-family: 'Pixelify Sans';
+}
+
+#log:active, #create:active, #finish:active{
+    background-color: red;
+}
+
+input{
+    margin: 5px auto ;
 }
