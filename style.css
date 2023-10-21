@@ -1,39 +1,74 @@
+header{
+    width: 80%;
+    text-align: center;
+    margin: auto;
+}
+
 main{
-    background-color: black;
+    width:80%;
+    margin:20px auto;
     display: flex;
-    flex-direction: column; 
-    align-items: center;
-    margin: auto 0;
-    padding: 50px;
-}
-
-#log{
-    display: flex;
-    flex-direction: column; 
-    margin: auto 0;
-
-
-}
-
-#signUp, #signIn{
-    display: inline-flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-    margin: 50px;
-    padding: 25px;
-    border: 2px solid #000000;
-    background: #a3a3a3;
-    border-radius: 53px 53px 53px 53px;
-    -webkit-border-radius: 53px 53px 53px 53px;
-    -moz-border-radius: 53px 53px 53px 53px;
-    box-shadow: 29px 26px 111px 13px rgba(255,255,255,0.9);
-    -webkit-box-shadow: 29px 26px 111px 13px rgba(255,255,255,0.9);
-    -moz-box-shadow: 29px 26px 111px 13px rgba(255,255,255,0.9);
 }
 
-#email, #pass, #pass2, #crear, #entrar{
-    margin: 10px;
+form{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+fieldset{
+    margin: 10px auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 80vw;
+    height: 50vh;
+}
+
+div{
+    flex: 50%;
+    max-width: 40%;
+    padding: 0.68em;
+    margin: 0.45em;
+    border: black solid 1px;
+}
+
+button{
+    background-color: #ADD7C6;
+    padding: 0.45em;
+    margin :0.45em;
+    border-radius: 0.25em;
+    font-size: large;
+}
+
+#submit{
+    background-color: #ADD7C6;
+    padding: 0.45em;
+    margin :0.45em;
+    border-radius: 0.25em;
+    font-size: large;
+}
 
 
+@media only screen and (max-width: 768px) {
+    /*index*/
+
+    header{
+        width: 100%;
+    }
+    main{
+        width: 100%;
+    }
+    
+}
+
+@media only screen and (max-width: 550px){
+    
+    div{
+        flex: 100%;
+        max-width: 100%;
+    }
+    
 }
