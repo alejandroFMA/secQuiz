@@ -29,60 +29,6 @@ main{
     justify-content: center;
 }
 
-#quiz{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-}
-
-fieldset.question{
-    margin: 10px auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    width: 80vw;
-    height: 50vh;
-    border: dashed 2px magenta;
-}
-
-div.form{
-    flex: 50%;
-    max-width: 40%;
-    padding: 0.68em;
-    margin: 0.45em;
-    border: red dashed 1px;
-}
-
-button{
-    color: greenyellow;
-    padding: 0.45em;
-    margin :0.45em;
-    border-radius: 0.25em;
-    font-size: large;
-    font-family: 'Pixelify Sans';
-    background-color: black;
-}
-
-button:active{
-    background-color: magenta;;
-}
-
-#submit{
-    background-color: #ADD7C6;
-    padding: 0.45em;
-    margin :0.45em;
-    border-radius: 0.25em;
-    font-size: large;
-}
-
-
-#inicio{
-    display:block;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    width: 100vw;
-}
-
 h2{
     color: #ff00ff;
     text-align: center;
@@ -93,11 +39,81 @@ h3{
     color: #00ffff;
 }
 
+legend{
+    text-align: center;
+    color: #00ffff; 
+}
+
+label{
+    color: white;
+}
+
+input{
+    margin: 5px auto ;
+}
+
+button{
+    color: rgb(2, 237, 2);
+    padding: 0.45em;
+    margin :0.45em;
+    border-radius: 0.25em;
+    font-size: large;
+    font-family: 'Pixelify Sans';
+    background-color: black;
+}
+
+button:active{
+    background-color: greenyellow;;
+}
+
+fieldset.question{
+    padding: 0.9em;
+    margin: 3em auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    border: dashed 2px magenta;
+    width: 80vw;
+    height: 50vh;
+}
+
+div.form{
+    flex: 50%;
+    max-width: 40%;
+    margin: 5px;
+    display: grid;
+    justify-content: baseline;
+        & input:checked + label{
+            color: yellow;
+        }
+        & input{
+            visibility: hidden;
+        }    
+}
+
+.form > label{
+    text-align: center;
+}
+
+#inicio{
+    display:grid;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    margin: auto;
+}
+
+#quiz{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+
 #form1, #form2{
     text-align: center;
     padding: 20px 50px;
-    margin: 20px auto;
-    width: 50%;
+    
 }
 
 #form1 > fieldset, #form2 > fieldset{
@@ -109,9 +125,6 @@ h3{
     text-align: center;
 }
 
-label{
-    color: white;
-}
 
 #log, #create, #finish{
     color: yellow;
@@ -126,6 +139,43 @@ label{
     background-color: red;
 }
 
-input{
-    margin: 5px auto ;
+
+
+
+@media only screen and (max-width: 768px) {
+    /*index*/
+
+    header{
+        width: 90%;
+    }
+    main{
+        width: 100%;
+    }
+    fieldset{
+        width: 90%;
+        margin:auto;
+    }
+    form{
+        margin: auto;
+    }
+    fieldset.question{
+        flex: 100%;
+        max-width: 100%;
+        height: max-content;
+    }
+}
+
+@media only screen and (max-width: 550px){
+    
+ 
+    div.form{
+        flex: 100%;
+        max-width: 100%;
+        text-align: center;
+        border: red dashed 1px;
+        display: block;
+    }
+    #form1 > fieldset, #form2 > fieldset{
+        padding: 10px 20px;
+    }
 }

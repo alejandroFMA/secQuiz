@@ -1,4 +1,4 @@
-//variables
+
 const firebaseConfig = {
     apiKey: "AIzaSyDXwc-XRYEeU4XRDcf21IJy9oPdmJ24eWs",
     authDomain: "telequiz-cb0e4.firebaseapp.com",
@@ -14,107 +14,8 @@ const firebaseConfig = {
   
   const db = firebase.firestore();
   
-  
-  const api = 'https://opentdb.com/api.php?amount=10&category=14&difficulty=medium&type=multiple' 
-  
-  const preguntas = [] 
-  const correctas =[]
-  const mezcladas = []
-  let i = 0;
-  let score = 0;
-  let alerta = 0;
-  let numbers = [0,1,2,3]
-  
 
-  //conseguir preguntas random
-  function caos(array) {
-      array.sort(() => Math.random() - 0.5);
-      return array
-    }
-  
-
-  //pintar preguntas en el DOM
-  function pintar(pregunta, mezcladas, i){
-      let rnd = caos(numbers)
-      let template = document.getElementById("quiz") 
-      
-       template.innerHTML = 
-      `<fieldset class="question" id="${[i]}">
-          <h3>${pregunta}</h3>
-          <div class = "form">
-          <input type="radio" name="n${i}" value="${mezcladas[rnd[0]]}" id= "a${i}"  required>
-              <label for="a${i}">${mezcladas[rnd[0]]}</label>
-          </div>
-          <div class = "form">
-          <input type="radio" name="n${i}" value="${mezcladas[rnd[1]]}" id= "b${i}"  required>
-              <label for="b${i}">${mezcladas[rnd[1]]}</label>
-          </div>
-          <div class = "form">
-          <input type="radio" name="n${i}" value="${mezcladas[rnd[2]]}" id= "c${i}"  required>
-              <label for="c${i}">${mezcladas[rnd[2]]}</label>
-          </div>
-          <div class = "form">
-          <input type="radio" name="n${i}" value="${mezcladas[rnd[3]]}" id= "d${i}"  required>
-              <label for="d${i}">${mezcladas[rnd[3]]}</label>
-          </div>
-      </fieldset>
-      <button id="next">NEXT</button>
-      <input type="submit" id="finish" value="Finish quiz"></input>
-      ` 
-      if(i<9){
-          document.getElementById("finish").style.display = "none"
-      }
-      document.querySelector("#next").addEventListener("click", comprobarYPasar);
-      document.querySelector("#finish").addEventListener("submit", validar)
-  }
-  
-  
-  
-   //Llamar al quiz
-  async function getQuiz() {
-  
-      let response = await fetch(api);
-      let data = await response.json();
-  
-      for(let i=0; i< data.results.length; i++){     
-        
-          preguntas.push(data.results[i].question)                         
-          correctas.push(data.results[i].correct_answer)
-          mezcladas.push(data.results[i].incorrect_answers.concat(data.results[i].correct_answer))    
-          
-      }
-        pintar(preguntas[i], mezcladas[i], i)  
-        
-      }
-    
-  
-  //sumar puntos y pasar pregunta
-  
-      function comprobarYPasar(event){
-          event.preventDefault();
-          const respuestaUsuario = document.querySelector(`input[name=n${i}]:checked`).value
-          console.log("respuestaUsuario es " + respuestaUsuario)
-  
-          if (respuestaUsuario == correctas[i]){
-              score++
-          } else if (respuestaUsuario != correctas[i]){
-              alerta++
-          }
-          i++
-          pintar(preguntas[i], mezcladas[i], i)
-        
-          if(i==9){
-              document.querySelector("#next").remove()
-          }
-  }
-  
-  // validar quiz
-    function validar(event){
-      
-    }     
-  
-  
-  //AUTH
+//AUTH
   
   /**************Firebase Auth*****************/
   
@@ -235,4 +136,132 @@ const firebaseConfig = {
       console.log("no hay usuarios en el sistema");
     }
   });
+
+
+//variables
+  const api = 'https://opentdb.com/api.php?amount=10&category=14&difficulty=medium&type=multiple' 
+  
+  const preguntas = [] 
+  const correctas =[]
+  const mezcladas = []
+  let i = 0;
+  let score = 0;
+  let alerta = 0;
+  let numbers = [0,1,2,3]
+  
+
+  //conseguir preguntas random
+  function caos(array) {
+      array.sort(() => Math.random() - 0.5);
+      return array
+    }
+  
+
+  //pintar preguntas en el DOM
+  function pintar(pregunta, mezcladas, i){
+      let rnd = caos(numbers)
+      let template = document.getElementById("quiz") 
+      
+       template.innerHTML = 
+      `<fieldset class="question" id="${[i]}">
+          <legend>${pregunta}</legend>
+          <div class = "form">
+          <input type="radio" name="n${i}" value="${mezcladas[rnd[0]]}" id= "a${i}"  required>
+              <label for="a${i}">${mezcladas[rnd[0]]}</label>
+          </div>
+          <div class = "form">
+          <input type="radio" name="n${i}" value="${mezcladas[rnd[1]]}" id= "b${i}"  required>
+              <label for="b${i}">${mezcladas[rnd[1]]}</label>
+          </div>
+          <div class = "form">
+          <input type="radio" name="n${i}" value="${mezcladas[rnd[2]]}" id= "c${i}"  required>
+              <label for="c${i}">${mezcladas[rnd[2]]}</label>
+          </div>
+          <div class = "form">
+          <input type="radio" name="n${i}" value="${mezcladas[rnd[3]]}" id= "d${i}"  required>
+              <label for="d${i}">${mezcladas[rnd[3]]}</label>
+          </div>
+      </fieldset>
+      <button id="next">NEXT</button>
+      <input type="submit" id="finish" value="Finish quiz"></input>
+      ` 
+      if(i<9){
+          document.getElementById("finish").style.display = "none"
+      }
+      document.querySelector("#next").addEventListener("click", comprobarYPasar);
+      document.querySelector("#finish").addEventListener("click", validar)
+  }
+  
+  
+  
+   //Llamar al quiz
+  async function getQuiz() {
+  
+      let response = await fetch(api);
+      let data = await response.json();
+  
+      for(let i=0; i< data.results.length; i++){     
+        
+          preguntas.push(data.results[i].question)                         
+          correctas.push(data.results[i].correct_answer)
+          mezcladas.push(data.results[i].incorrect_answers.concat(data.results[i].correct_answer))    
+          
+      }
+        pintar(preguntas[i], mezcladas[i], i)  
+        
+      }
+    
+  
+  //sumar puntos y pasar pregunta
+  
+      function comprobarYPasar(event){
+          event.preventDefault();
+          const respuestaUsuario = document.querySelector(`input[name=n${i}]:checked`).value
+          console.log("respuestaUsuario es " + respuestaUsuario)
+  
+          if (respuestaUsuario == correctas[i]){
+              score++
+          } else if (respuestaUsuario != correctas[i]){
+              alerta++
+          }
+          i++
+          pintar(preguntas[i], mezcladas[i], i)
+        
+          if(i==9){
+              document.querySelector("#next").remove()
+          }
+  }
+  
+  // validar quiz
+    function validar(event){
+      event.preventDefault();
+      console.log(score)
+      let contenedor = document.getElementById("test")
+      let aviso = document.createElement("span")
+      let mensaje =document.createTextNode("")
+      contenedor.appendChild(aviso)
+      aviso.appendChild(mensaje);
+     
+      mensaje+=
+      `<p>You answered ${score} questions correctly.<br>
+      <br>
+      These are the questions's correct answers:<br>
+      <br>
+      Question${preguntas[0]}, correct answer: ${correctas[0]}<br>
+      Question${preguntas[1]}, correct answer: ${correctas[1]}<br>
+      Question${preguntas[2]}, correct answer: ${correctas[2]}<br>
+      Question${preguntas[3]}, correct answer: ${correctas[3]}<br>
+      Question${preguntas[4]}, correct answer: ${correctas[4]}<br>
+      Question${preguntas[5]}, correct answer: ${correctas[5]}<br>
+      Question${preguntas[6]}, correct answer: ${correctas[6]}<br>
+      Question${preguntas[7]}, correct answer: ${correctas[7]}<br>
+      Question${preguntas[8]}, correct answer: ${correctas[8]}<br>
+      Question${preguntas[9]}, correct answer: ${correctas[9]}</p>
+      `
+
+    
+    }     
+  
+  
+  
 
