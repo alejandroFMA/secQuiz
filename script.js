@@ -42,13 +42,14 @@ const firebaseConfig = {
           id: user.uid,
           email: user.email
         });
-  
+        document.getElementById("form1").reset()
       })
       .catch((error) => {
         let errorCode = error.code;
         let errorMessage = error.message;
         console.log("Error en el sistema" + error.message);
       });
+      
   };
   
   
@@ -235,30 +236,39 @@ const firebaseConfig = {
   // validar quiz
     function validar(event){
       event.preventDefault();
+
+      const respuestaUsuario = document.querySelector(`input[name=n${i}]:checked`).value
+      if (respuestaUsuario == correctas[i]){
+        score++
+    } else if (respuestaUsuario != correctas[i]){
+        alerta++
+    }
       console.log(score)
+
+      document.getElementById("quiz").remove()
+      
       let contenedor = document.getElementById("test")
-      let aviso = document.createElement("span")
-      let mensaje =document.createTextNode("")
-      contenedor.appendChild(aviso)
-      aviso.appendChild(mensaje);
-     
-      mensaje+=
+      let aviso = document.createElement("article")
+      
+      aviso.innerHTML=
       `<p>You answered ${score} questions correctly.<br>
       <br>
-      These are the questions's correct answers:<br>
-      <br>
-      Question${preguntas[0]}, correct answer: ${correctas[0]}<br>
-      Question${preguntas[1]}, correct answer: ${correctas[1]}<br>
-      Question${preguntas[2]}, correct answer: ${correctas[2]}<br>
-      Question${preguntas[3]}, correct answer: ${correctas[3]}<br>
-      Question${preguntas[4]}, correct answer: ${correctas[4]}<br>
-      Question${preguntas[5]}, correct answer: ${correctas[5]}<br>
-      Question${preguntas[6]}, correct answer: ${correctas[6]}<br>
-      Question${preguntas[7]}, correct answer: ${correctas[7]}<br>
-      Question${preguntas[8]}, correct answer: ${correctas[8]}<br>
-      Question${preguntas[9]}, correct answer: ${correctas[9]}</p>
+      These are the questions's correct answers:</p>
+      
+      <ol>
+      <li>Question${preguntas[0]}, correct answer: ${correctas[0]}</li>
+      <li>Question${preguntas[1]}, correct answer: ${correctas[1]}</li>
+      <li>Question${preguntas[2]}, correct answer: ${correctas[2]}</li>
+      <li>Question${preguntas[3]}, correct answer: ${correctas[3]}</li>
+      <li>Question${preguntas[4]}, correct answer: ${correctas[4]}</li>
+      <li>Question${preguntas[5]}, correct answer: ${correctas[5]}</li>
+      <li>Question${preguntas[6]}, correct answer: ${correctas[6]}</li>
+      <li>Question${preguntas[7]}, correct answer: ${correctas[7]}</li>
+      <li>Question${preguntas[8]}, correct answer: ${correctas[8]}</li>
+      <li>Question${preguntas[9]}, correct answer: ${correctas[9]}</li>
+      </ol>
       `
-
+      contenedor.appendChild(aviso)
     
     }     
   

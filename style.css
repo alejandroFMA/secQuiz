@@ -1,13 +1,18 @@
 *{
     box-sizing: border-box;
 }
+
+@font-face {
+    font-family: "teletexto";
+    src: url("./assets/font.TTF");
+}
   
 html {
       scroll-behavior: smooth;
 }
 
 body {
-    font-family: 'Pixelify Sans';
+    font-family: "teletexto";
     font-size: 22px;
     background-color: black;
     
@@ -52,6 +57,10 @@ input{
     margin: 5px auto ;
 }
 
+article{
+    color: white;
+}
+
 button{
     color: rgb(2, 237, 2);
     padding: 0.45em;
@@ -60,6 +69,7 @@ button{
     font-size: large;
     font-family: 'Pixelify Sans';
     background-color: black;
+    cursor: pointer;
 }
 
 button:active{
@@ -89,6 +99,10 @@ div.form{
         & input{
             visibility: hidden;
         }    
+        & input:hover + label{
+            background-color: green ;
+            cursor: pointer;
+        }
 }
 
 .form > label{
@@ -133,6 +147,7 @@ div.form{
     padding: 10px;
     font-size: large;
     font-family: 'Pixelify Sans';
+    cursor: pointer;
 }
 
 #log:active, #create:active, #finish:active{
