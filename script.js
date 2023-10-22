@@ -246,7 +246,7 @@ const firebaseConfig = {
       console.log(score)
 
       document.getElementById("quiz").remove()
-      
+
       let contenedor = document.getElementById("test")
       let aviso = document.createElement("article")
       
@@ -256,16 +256,16 @@ const firebaseConfig = {
       These are the questions's correct answers:</p>
       
       <ol>
-      <li>Question${preguntas[0]}, correct answer: ${correctas[0]}</li>
-      <li>Question${preguntas[1]}, correct answer: ${correctas[1]}</li>
-      <li>Question${preguntas[2]}, correct answer: ${correctas[2]}</li>
-      <li>Question${preguntas[3]}, correct answer: ${correctas[3]}</li>
-      <li>Question${preguntas[4]}, correct answer: ${correctas[4]}</li>
-      <li>Question${preguntas[5]}, correct answer: ${correctas[5]}</li>
-      <li>Question${preguntas[6]}, correct answer: ${correctas[6]}</li>
-      <li>Question${preguntas[7]}, correct answer: ${correctas[7]}</li>
-      <li>Question${preguntas[8]}, correct answer: ${correctas[8]}</li>
-      <li>Question${preguntas[9]}, correct answer: ${correctas[9]}</li>
+      <li>Question: ${preguntas[0]}, correct answer: ${correctas[0]}</li>
+      <li>Question: ${preguntas[1]}, correct answer: ${correctas[1]}</li>
+      <li>Question: ${preguntas[2]}, correct answer: ${correctas[2]}</li>
+      <li>Question: ${preguntas[3]}, correct answer: ${correctas[3]}</li>
+      <li>Question: ${preguntas[4]}, correct answer: ${correctas[4]}</li>
+      <li>Question: ${preguntas[5]}, correct answer: ${correctas[5]}</li>
+      <li>Question: ${preguntas[6]}, correct answer: ${correctas[6]}</li>
+      <li>Question: ${preguntas[7]}, correct answer: ${correctas[7]}</li>
+      <li>Question: ${preguntas[8]}, correct answer: ${correctas[8]}</li>
+      <li>Question: ${preguntas[9]}, correct answer: ${correctas[9]}</li>
       </ol>
       `
       contenedor.appendChild(aviso)
