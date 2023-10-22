@@ -1,0 +1,181 @@
+*{
+    box-sizing: border-box;
+}
+  
+html {
+      scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Pixelify Sans';
+    font-size: 22px;
+    background-color: black;
+    
+}
+
+
+header{
+    width: 80%;
+    text-align: center;
+    margin: auto;
+    
+}
+
+main{
+    width:80%;
+    margin:20px auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+h2{
+    color: #ff00ff;
+    text-align: center;
+}
+
+h3{
+    text-align: center;
+    color: #00ffff;
+}
+
+legend{
+    text-align: center;
+    color: #00ffff; 
+}
+
+label{
+    color: white;
+}
+
+input{
+    margin: 5px auto ;
+}
+
+button{
+    color: rgb(2, 237, 2);
+    padding: 0.45em;
+    margin :0.45em;
+    border-radius: 0.25em;
+    font-size: large;
+    font-family: 'Pixelify Sans';
+    background-color: black;
+}
+
+button:active{
+    background-color: greenyellow;;
+}
+
+fieldset.question{
+    padding: 0.9em;
+    margin: 3em auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    border: dashed 2px magenta;
+    width: 80vw;
+    height: 50vh;
+}
+
+div.form{
+    flex: 50%;
+    max-width: 40%;
+    margin: 5px;
+    display: grid;
+    justify-content: baseline;
+        & input:checked + label{
+            color: yellow;
+        }
+        & input{
+            visibility: hidden;
+        }    
+}
+
+.form > label{
+    text-align: center;
+}
+
+#inicio{
+    display:grid;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    margin: auto;
+}
+
+#quiz{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+
+#form1, #form2{
+    text-align: center;
+    padding: 20px 50px;
+    
+}
+
+#form1 > fieldset, #form2 > fieldset{
+    border: dashed 2px rgb(9, 232, 9);
+    padding: 50px 70px;
+}
+
+#salir{
+    text-align: center;
+}
+
+
+#log, #create, #finish{
+    color: yellow;
+    background-color: black;
+    border: none;
+    padding: 10px;
+    font-size: large;
+    font-family: 'Pixelify Sans';
+}
+
+#log:active, #create:active, #finish:active{
+    background-color: red;
+}
+
+
+
+
+@media only screen and (max-width: 768px) {
+    /*index*/
+
+    header{
+        width: 90%;
+    }
+    main{
+        width: 100%;
+    }
+    fieldset{
+        width: 90%;
+        margin:auto;
+    }
+    form{
+        margin: auto;
+    }
+    fieldset.question{
+        flex: 100%;
+        max-width: 100%;
+        height: max-content;
+    }
+}
+
+@media only screen and (max-width: 550px){
+    
+ 
+    div.form{
+        flex: 100%;
+        max-width: 100%;
+        text-align: center;
+        border: red dashed 1px;
+        display: block;
+    }
+    #form1 > fieldset, #form2 > fieldset{
+        padding: 10px 20px;
+    }
+}
