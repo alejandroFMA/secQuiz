@@ -1,4 +1,3 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
 import { getFirestore, collection, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js";
@@ -267,6 +266,7 @@ auth.onAuthStateChanged(user => {
       <br>
       <li id="a9">Question: ${preguntas[9]},<br> correct answer: ${correctas[9]} ,<br> your answer: ${finales[9]}</li>
       </ol>
+      <button id="grafica">My scores</button>
       `
     
       contenedor.appendChild(aviso)
@@ -279,10 +279,36 @@ for (let j = 0; j < correctas.length; j++) {
   }
   
 }
-      
-    
-    }     
-  
-  
-  
+console.log(alerta)
 
+
+
+  document.getElementById("grafica").addEventListener("click", generarGrafica)
+
+
+}
+  //GRAFICA//
+
+  function generarGrafica(){
+
+    let series = [score, alerta];
+    let labels = ["correct", "incorrect"];
+    let data = {
+    labels: labels,
+    series: [series]
+    };
+  
+    var options = {
+        width: 500,
+        height: 400,
+        high: 10,
+        axisY: {
+          onlyInteger: true
+     }
+    };
+  
+    let barras = document.getElementById("chart")
+
+
+    new Chartist.Bar(barras, data, options);
+  }
