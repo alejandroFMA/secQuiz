@@ -32,17 +32,17 @@ const logout = document.getElementById('salir');
 const botones = document.getElementById('botones');
 
 function validateEmail(email) {
-  let mailformat = /^[\w-_\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  let mailformat = /^[\w-_\.]+@([\w-]+\.)+[\w-]{2,4}$/; //letras y numeros guiones y dos o 4 letras al final
   return mailformat.test(email);
 }
 
 function validateUser(user1) {
-  let mailformat = /^[A-Za-z0-9_-]{1,8}$/;
+  let mailformat = /^[A-Za-z0-9_-]{1,8}$/; // de 1 a 8 caracteres, alfanumérico
   return mailformat.test(user1);
 }
 
 function validatePassword(password) {
-  let passFormat = /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/;
+  let passFormat = /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/; //una mayuscula, una minuscula, un numero y uncaracter especial
   return passFormat.test(password);
 }
 
