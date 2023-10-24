@@ -11,7 +11,8 @@
     <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
 <body>
     <header>
-        <h2>Firebase Authentication</h2>
+        <h2>TeleQuiz</h2>
+        <div id="user-data"></div>
     </header>
     <main>
         <section id="inicio">
@@ -24,8 +25,10 @@
                     <input type="text" id="signup-user" name="signup-user" placeholder ="Username"><br>
                     <label for="pass">Password:</label><br>
                     <input type="password" id="pass" name="pass" placeholder="Introduce password..."><br>
-                    <label for="pass2">Repite password:</label><br>
-                    <input type="password" id="pass2" name="pass2" placeholder="Repite password..."><br><br>
+                    <label for="pass2">Repeat password:</label><br>
+                    <input type="password" id="pass2" name="pass2" placeholder="Repite password..."><br>
+                    <label for="signup-picture">Picture: </label>
+                    <input type="file" id="signup-picture" accept="image/*" name="signup-picture"><br><br>
                     <input type="submit" value="Create" id="create">
                 </fieldset>
             </form>
@@ -42,8 +45,9 @@
                 </fieldset>
             </form>
             <p id="msgerr"></p>
-            <div id="botones"></div>
         </section>
+
+        <div id="botones"></div>
     
         <section id="test">
             <form id="quiz">
