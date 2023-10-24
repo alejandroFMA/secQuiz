@@ -31,6 +31,21 @@ const loginForm = document.getElementById('form2');
 const logout = document.getElementById('salir');
 const botones = document.getElementById('botones');
 
+function validateEmail(email) {
+  let mailformat = /^[\w-_\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  return mailformat.test(email);
+}
+
+function validateUser(user1) {
+  let mailformat = /^[A-Za-z0-9_-]{1,8}$/;
+  return mailformat.test(user1);
+}
+
+function validatePassword(password) {
+  let passFormat = /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/;
+  return passFormat.test(password);
+}
+
 //SignUp function
 signUpForm.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -40,12 +55,28 @@ signUpForm.addEventListener('submit', async (e) => {
   const usersRef = collection(db, "users");
   const storageRef = ref(storage)
   
+  if (!validateEmail(signUpEmail)) {
+    alert("Has ingresado una dirección de correo electrónico inválida.");
+    return;
+  }
+
+  if (!validateUser(signUpUser)) {
+    alert("Has ingresado un user inválido");
+    return;
+  }
+
+  if (!validatePassword(signUpPassword)) {
+    alert("Has ingresado un password inválido.");
+    return;
+  }
+
   try {
     //Create auth user
     await createUserWithEmailAndPassword(auth, signUpEmail, signUpPassword)
     .then((userCredential) => {
       console.log('User registered')
       const user = userCredential.user;
+      
       signUpForm.reset();
     })
     //Create document in DB
@@ -71,6 +102,19 @@ loginForm.addEventListener('submit', async (e) => {
   //Search a document that matches with our ref
   const docSnap = await getDoc(docRef);
 
+
+  if (!validateEmail(loginEmail)) {
+    alert("Has ingresado una dirección de correo electrónico inválida.");
+    return;
+  }
+
+
+  if (!validatePassword(loginPassword)) {
+    alert("Has ingresado un password inválido.");
+    return;
+  }
+
+ 
   signInWithEmailAndPassword(auth, loginEmail, loginPassword)
     .then((userCredential) => {
       console.log('User authenticated')
@@ -135,9 +179,6 @@ auth.onAuthStateChanged(user => {
   let score = 0;
   let alerta = 0;
   let numbers = [0,1,2,3]
-
-
-  
 
   //conseguir preguntas random
   function caos(array) {
@@ -312,8 +353,6 @@ document.getElementById("grafica").addEventListener("click", generarGrafica)
     };
   
     var options = {
-        width: 500,
-        height: 400,
         high: 10,
         axisY: {
           onlyInteger: true
