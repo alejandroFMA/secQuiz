@@ -93,7 +93,7 @@ loginForm.addEventListener('submit', async (e) => {
         document.getElementById("inicio").style.display="none";
          botones.innerHTML = `
                         <button id="getquiz">Go to quiz</button>
-                        <button id="results">My scores</button>`
+                        <button id="results">My history</button>`
         userData.innerHTML = `<h3>Welcome</h3>
                               <h5>Username:</h5> <p id ="username">${docSnap.data().username}</p>
                               <img src=${docSnap.data().profile_picture} alt='User profile picture'>`
@@ -287,6 +287,7 @@ auth.onAuthStateChanged(user => {
       <li id="a9">Question: ${preguntas[9]},<br> correct answer: ${correctas[9]} ,<br> your answer: ${finales[9]}</li>
       </ol>
       <button id="grafica">My scores</button>
+      <div class='.ct-chart' id="chart"></div>
       `
     
       contenedor.appendChild(aviso)
@@ -323,7 +324,6 @@ document.getElementById("grafica").addEventListener("click", generarGrafica)
   //GRAFICA//
 
   function generarGrafica(){
-    document.getElementById("chart-loader").style.visibility = "visible";
     let series = [score, alerta];
     let labels = ["correct", "incorrect"];
     let data = {
@@ -342,7 +342,7 @@ document.getElementById("grafica").addEventListener("click", generarGrafica)
 
 
     new Chartist.Bar(barras, data, options);
-    document.getElementById("chart-loader").style.visibility = "hidden";
+    document.getElementById("grafica").remove()
 
   }
 
