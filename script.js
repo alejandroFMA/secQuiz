@@ -90,9 +90,8 @@ loginForm.addEventListener('submit', async (e) => {
          botones.innerHTML = `
                         <button id="getquiz">Go to quiz</button>
                         <button id="results">My scores</button>`
-        userData.style.cssText = 'background-color: #73AB84;width: 50%;margin: 2rem auto;padding: 1rem;border-radius: 5px;display: flex;flex-direction: column;align-items: center';
         userData.innerHTML = `<h3>Welcome</h3>
-                              <p>Username: ${docSnap.data().username}</p>
+                              <h5>Username:</h5> <p id ="username">${docSnap.data().username}</p>
                               <img src=${docSnap.data().profile_picture} alt='User profile picture'>`
            document.getElementById("getquiz").addEventListener("click", function () {
             getQuiz()
@@ -325,8 +324,6 @@ document.getElementById("grafica").addEventListener("click", generarGrafica)
     };
   
     var options = {
-        width: 500,
-        height: 400,
         high: 10,
         axisY: {
           onlyInteger: true
