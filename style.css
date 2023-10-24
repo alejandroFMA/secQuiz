@@ -21,7 +21,7 @@ body {
 header{
     width: 80%;
     text-align: center;
-    margin: auto;
+    margin: 60px auto;
     
 }
 
@@ -41,6 +41,10 @@ h2{
 h3{
     text-align: center;
     color: #00ffff;
+}
+
+h5{
+    color: yellow;
 }
 
 legend{
@@ -74,6 +78,12 @@ button{
 
 button:active{
     background-color: greenyellow;;
+}
+
+article{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 fieldset.question{
@@ -135,8 +145,24 @@ div.form{
     padding: 50px 70px;
 }
 
-#salir{
-    text-align: center;
+
+#user-data{
+    border: dashed 1px yellowgreen;
+    border-radius: 2px ;
+    max-height: 20%;
+    font-size: medium;
+    width:50%;
+    margin: auto;
+}
+#user-data > img{
+    width: 25%;
+    margin-bottom: 20px;
+    border-radius: 80px;
+}
+
+
+#username{
+    color:orange;
 }
 
 
@@ -154,12 +180,10 @@ div.form{
     background-color: red;
 }
 
-
-#chart .ct-chart {
-    background-color: cyan;
-    margin: 50px auto;
+#chart, #chart >svg {
+    width: 80%;
+    height: 300px;
 }
-
 
 #chart .ct-grid{
     stroke: rgb(255 255 255 / 94%);
@@ -172,11 +196,11 @@ div.form{
 
 #chart .ct-series-a .ct-bar{
     stroke: yellow;
-    stroke-width: 5px;
+    stroke-width: 50px;
 }
 
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 965px) {
     /*index*/
 
     header{
@@ -192,11 +216,23 @@ div.form{
     form{
         margin: auto;
     }
+    article{
+        width: 90%;
+        margin: auto;
+    }
     fieldset.question{
         flex: 100%;
         max-width: 100%;
         height: max-content;
     }
+    div.ct-chart{
+        width: 80%;
+        margin: auto;
+    }
+    #user-data{
+        width: 70%;
+    }
+    
 }
 
 @media only screen and (max-width: 550px){
@@ -209,11 +245,22 @@ div.form{
         border: red dashed 1px;
         display: block;
     }
+    svg.ct-chart-bar{
+        width: 60%;
+        margin: auto;
+    }
     #form1 > fieldset, #form2 > fieldset{
         padding: 10px 20px;
     }
     article{
         margin: auto;
         max-width: 90%;
+    }
+    #user-data{
+        width: 100%;
+    }
+    #chart, #chart >svg {
+        width: 90%;
+        height: 300px;
     }
 }
