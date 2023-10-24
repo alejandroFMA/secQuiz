@@ -125,17 +125,18 @@ loginForm.addEventListener('submit', async (e) => {
       if (docSnap.exists()) {
          botones.innerHTML = `
                         <button id="getquiz">Go to quiz</button>
-                        <button id="results">My scores</button>`
+                        <button id="results">My history</button>`
             
            document.getElementById("getquiz").addEventListener("click", function () {
             getQuiz()
             document.getElementById("inicio").style.display="none"; 
             })
 
-            document.getElementById("getquiz").addEventListener("click", function () {
+          document.getElementById("getquiz").addEventListener("click", function () {
               getScores()
               document.getElementById("inicio").style.display="none"; 
-              })
+            })
+
       } else {
         console.log("No such document!");
     }})
@@ -180,6 +181,25 @@ auth.onAuthStateChanged(user => {
   let alerta = 0;
   let numbers = [0,1,2,3]
 
+  async function getPoints (){
+    const docRef = doc(db, 'users', 'alex2@hotmail.com');
+    
+    try {
+        const doc = await getDoc(docRef);
+        if (doc.exists()) {
+            console.log(doc.data());
+        } else {
+            console.log("El documento no existe.");
+        }
+    } catch (error) {
+        console.error("Error al obtener el documento: ", error);
+    }
+
+  }
+
+  document.getElementById("results").addEventListener("click", getPoints());
+
+  
   //conseguir preguntas random
   function caos(array) {
       array.sort(() => Math.random() - 0.5);
@@ -364,3 +384,5 @@ document.getElementById("grafica").addEventListener("click", generarGrafica)
 
     new Chartist.Bar(barras, data, options);
   }
+ 
+
