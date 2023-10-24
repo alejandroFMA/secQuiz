@@ -1,17 +1,17 @@
 # TeleQuiz
 
-![Title](https://github.com/JUHING-99/secQuiz/blob/main/assets/readmeTitle.png)
+![Title](./assets/readmeTitle.png)
 
 ## Description
 
 Sign up on our page and then log in to start the quiz or to consult your scores.
 
-![Sign up and Log in](https://github.com/JUHING-99/secQuiz/blob/main/assets/readme1.png)
+![Sign up and Log in](./assets/readme1.png)
 
 Complete our quiz and check how many answers you got right.
 
-![Example question](https://github.com/JUHING-99/secQuiz/blob/main/assets/readme2.png)
-![Check answers and chart](https://github.com/JUHING-99/secQuiz/blob/main/assets/readme3.png)
+![Example question](./assets/readme2.png)
+![Check answers and chart](./assets/readme3.png)
 
 Check your progress and compare yourself with other users. Will you make it to the top 5?
 

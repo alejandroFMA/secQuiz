@@ -35,6 +35,7 @@ const userData = document.getElementById('user-data');
 //SignUp function
 signUpForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+  document.getElementById("sign-loader").style.visibility = "visible";    
   const signUpEmail = document.getElementById('email').value;
   const signUpPassword = document.getElementById('pass').value;
   const signUpUser = document.getElementById('signup-user').value;
@@ -49,6 +50,7 @@ signUpForm.addEventListener('submit', async (e) => {
       console.log('User registered')
       const user = userCredential.user;
       signUpForm.reset();
+      document.getElementById("sign-loader").style.visibility = "hidden";    
     })
     //Upload file to cloud storage
     await uploadBytes(storageRef, signUpImg).then(async (snapshot) => {
@@ -65,12 +67,14 @@ signUpForm.addEventListener('submit', async (e) => {
   } catch (error) {
     console.log('Error: ', error)
   }
-      
-})
+    
+  }); 
+
 
 //Login function
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+  document.getElementById("log-loader").style.visibility = "visible";
   const loginEmail = document.getElementById('email2').value;
   const loginPassword = document.getElementById('pass3').value;
   //Call the collection in the DB
@@ -89,7 +93,7 @@ loginForm.addEventListener('submit', async (e) => {
         document.getElementById("inicio").style.display="none";
          botones.innerHTML = `
                         <button id="getquiz">Go to quiz</button>
-                        <button id="results">My scores</button>`
+                        <button id="results">My history</button>`
         userData.innerHTML = `<h3>Welcome</h3>
                               <h5>Username:</h5> <p id ="username">${docSnap.data().username}</p>
                               <img src=${docSnap.data().profile_picture} alt='User profile picture'>`
@@ -98,7 +102,7 @@ loginForm.addEventListener('submit', async (e) => {
              
             })
 
-            document.getElementById("getquiz").addEventListener("click", function () {
+            document.getElementById("results").addEventListener("click", function () {
               getScores()
                
               })
@@ -111,6 +115,8 @@ loginForm.addEventListener('submit', async (e) => {
       const errorMessage = error.message;
       console.log('Código del error: ' + errorCode);
       console.log('Mensaje del error: ' + errorMessage);
+    }).finally(() => {
+      document.getElementById("log-loader").style.visibility = "hidden";
     });
 })
 
@@ -195,7 +201,7 @@ auth.onAuthStateChanged(user => {
   
    //Llamar al quiz
   async function getQuiz() {
-  
+    document.getElementById("quiz-loader").style.visibility = "visible";
       let response = await fetch(api);
       let data = await response.json();
   
@@ -206,6 +212,7 @@ auth.onAuthStateChanged(user => {
           mezcladas.push(data.results[i].incorrect_answers.concat(data.results[i].correct_answer))    
           
       }
+      document.getElementById("quiz-loader").style.visibility = "hidden";    
         pintar(preguntas[i], mezcladas[i], i)  
         
       }
@@ -280,6 +287,7 @@ auth.onAuthStateChanged(user => {
       <li id="a9">Question: ${preguntas[9]},<br> correct answer: ${correctas[9]} ,<br> your answer: ${finales[9]}</li>
       </ol>
       <button id="grafica">My scores</button>
+      <div class='.ct-chart' id="chart"></div>
       `
     
       contenedor.appendChild(aviso)
@@ -309,13 +317,13 @@ const userRef = doc(db, 'users', auth.currentUser.email);
 
 document.getElementById("grafica").addEventListener("click", generarGrafica)
 
+
 }
 
 
   //GRAFICA//
 
   function generarGrafica(){
-
     let series = [score, alerta];
     let labels = ["correct", "incorrect"];
     let data = {
@@ -334,6 +342,7 @@ document.getElementById("grafica").addEventListener("click", generarGrafica)
 
 
     new Chartist.Bar(barras, data, options);
+    document.getElementById("grafica").remove()
 
   }
 
