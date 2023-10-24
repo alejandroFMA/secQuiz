@@ -30,6 +30,7 @@ const signUpForm = document.getElementById('form1');
 const loginForm = document.getElementById('form2');
 const logout = document.getElementById('salir');
 const botones = document.getElementById('botones');
+const userData = document.getElementById('user-data');
 
 //SignUp function
 signUpForm.addEventListener('submit', async (e) => {
@@ -38,8 +39,9 @@ signUpForm.addEventListener('submit', async (e) => {
   const signUpPassword = document.getElementById('pass').value;
   const signUpUser = document.getElementById('signup-user').value;
   const usersRef = collection(db, "users");
-  const storageRef = ref(storage)
-  
+  const signUpImg = document.getElementById('signup-picture').files[0];
+  const storageRef = ref(storage, signUpImg.name);
+  let publicImageUrl;
   try {
     //Create auth user
     await createUserWithEmailAndPassword(auth, signUpEmail, signUpPassword)
@@ -48,13 +50,17 @@ signUpForm.addEventListener('submit', async (e) => {
       const user = userCredential.user;
       signUpForm.reset();
     })
+    //Upload file to cloud storage
+    await uploadBytes(storageRef, signUpImg).then(async (snapshot) => {
+      console.log('Uploaded a blob or file!')
+      publicImageUrl= await getDownloadURL(storageRef);
+    })
     //Create document in DB
     await setDoc(doc(usersRef, signUpEmail), {
       username: signUpUser,
       email: signUpEmail,
-      puntuacion: puntos,
-      intentos: times
-
+      puntuacion: 0,
+      profile_picture: publicImageUrl
     })
   } catch (error) {
     console.log('Error: ', error)
@@ -80,18 +86,22 @@ loginForm.addEventListener('submit', async (e) => {
     })
     .then(() => {
       if (docSnap.exists()) {
+        document.getElementById("inicio").style.display="none";
          botones.innerHTML = `
                         <button id="getquiz">Go to quiz</button>
                         <button id="results">My scores</button>`
-            
+        userData.style.cssText = 'background-color: #73AB84;width: 50%;margin: 2rem auto;padding: 1rem;border-radius: 5px;display: flex;flex-direction: column;align-items: center';
+        userData.innerHTML = `<h3>Welcome</h3>
+                              <p>Username: ${docSnap.data().username}</p>
+                              <img src=${docSnap.data().profile_picture} alt='User profile picture'>`
            document.getElementById("getquiz").addEventListener("click", function () {
             getQuiz()
-            document.getElementById("inicio").style.display="none"; 
+             
             })
 
             document.getElementById("getquiz").addEventListener("click", function () {
               getScores()
-              document.getElementById("inicio").style.display="none"; 
+               
               })
       } else {
         console.log("No such document!");
@@ -109,8 +119,7 @@ loginForm.addEventListener('submit', async (e) => {
 logout.addEventListener('click', () => {
   signOut(auth).then(() => {
     console.log('Logout user')
-    userData.style.cssText = '';
-    userData.innerHTML = ``;
+    location.reload();
   }).catch((error) => {
     console.log('Error: ', error)
   });
@@ -137,8 +146,7 @@ auth.onAuthStateChanged(user => {
   let score = 0;
   let alerta = 0;
   let numbers = [0,1,2,3]
-  const puntos = []
-  const times = 0
+
 
   
 
