@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
-import { getFirestore, collection, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js";
+import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-storage.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -39,6 +39,7 @@ signUpForm.addEventListener('submit', async (e) => {
   const signUpUser = document.getElementById('signup-user').value;
   const usersRef = collection(db, "users");
   const storageRef = ref(storage)
+  
   try {
     //Create auth user
     await createUserWithEmailAndPassword(auth, signUpEmail, signUpPassword)
@@ -50,7 +51,9 @@ signUpForm.addEventListener('submit', async (e) => {
     //Create document in DB
     await setDoc(doc(usersRef, signUpEmail), {
       username: signUpUser,
-      email: signUpEmail
+      email: signUpEmail,
+      puntuacion: 0
+
     })
   } catch (error) {
     console.log('Error: ', error)
@@ -105,8 +108,7 @@ loginForm.addEventListener('submit', async (e) => {
 logout.addEventListener('click', () => {
   signOut(auth).then(() => {
     console.log('Logout user')
-    userData.style.cssText = '';
-    userData.innerHTML = ``;
+    location.reload();
   }).catch((error) => {
     console.log('Error: ', error)
   });
@@ -123,7 +125,7 @@ auth.onAuthStateChanged(user => {
 
 
 //variables
-  const api = 'https://opentdb.com/api.php?amount=10&category=14&difficulty=medium&type=multiple' 
+  const api = 'https://opentdb.com/api.php?amount=10&category=14&type=multiple' 
   
   const preguntas = [] 
   const correctas =[]
@@ -133,6 +135,7 @@ auth.onAuthStateChanged(user => {
   let score = 0;
   let alerta = 0;
   let numbers = [0,1,2,3]
+
 
   
 
@@ -279,14 +282,24 @@ for (let j = 0; j < correctas.length; j++) {
   }
   
 }
-console.log(alerta)
+console.log(alerta);
+
+const userRef = doc(db, 'users', auth.currentUser.email);
+  updateDoc(userRef, {
+  puntuacion: arrayUnion(score)
+})
+.then(() => {
+    console.log("Document successfully updated!");
+})
+.catch((error) => {
+    console.error("Error updating document: ", error);
+});
 
 
-
-  document.getElementById("grafica").addEventListener("click", generarGrafica)
-
+document.getElementById("grafica").addEventListener("click", generarGrafica)
 
 }
+
   //GRAFICA//
 
   function generarGrafica(){
