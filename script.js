@@ -292,6 +292,7 @@ for (let j = 0; j < correctas.length; j++) {
   }
   
 }
+
 console.log(alerta);
 
 const userRef = doc(db, 'users', auth.currentUser.email);
@@ -309,6 +310,7 @@ const userRef = doc(db, 'users', auth.currentUser.email);
 document.getElementById("grafica").addEventListener("click", generarGrafica)
 
 }
+
 
   //GRAFICA//
 
@@ -332,4 +334,6 @@ document.getElementById("grafica").addEventListener("click", generarGrafica)
 
 
     new Chartist.Bar(barras, data, options);
+
   }
+
