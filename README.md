@@ -1,6 +1,6 @@
 # TeleQuiz
 
-![Title](https://github.com/JUHING-99/secQuiz/blob/main/assets/readmeTitle.png)
+![Title](./assets/readmeTitle.png)
 
 ## Description
 
