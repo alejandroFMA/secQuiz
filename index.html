@@ -29,7 +29,8 @@
                     <input type="password" id="pass2" name="pass2" placeholder="Repite password..."><br>
                     <label for="signup-picture">Picture: </label><br>
                     <input type="file" id="signup-picture" accept="image/*" name="signup-picture"><br><br>
-                    <input type="submit" value="Create" id="create">                    
+                    <input type="submit" value="Create" id="create">   
+                    <span class="loader" id="sign-loader"></span>               
                 </fieldset>
                 <!-- loader fins que puji dades  -->
             </form>
@@ -52,13 +53,15 @@
         </section>
 
         <div id="botones"></div>
+        <span class="loader" id="quiz-loader"></span>  
     
         <section id="test">
             <form id="quiz">
             </form>
-           
         </section>
- 
+
+
+        <span class="loader" id="chart-loader"></span>  
         <div class='.ct-chart' id="chart"></div>
     
     </main>

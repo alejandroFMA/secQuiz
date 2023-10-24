@@ -35,6 +35,7 @@ const userData = document.getElementById('user-data');
 //SignUp function
 signUpForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+  document.getElementById("sign-loader").style.visibility = "visible";    
   const signUpEmail = document.getElementById('email').value;
   const signUpPassword = document.getElementById('pass').value;
   const signUpUser = document.getElementById('signup-user').value;
@@ -49,6 +50,7 @@ signUpForm.addEventListener('submit', async (e) => {
       console.log('User registered')
       const user = userCredential.user;
       signUpForm.reset();
+      document.getElementById("sign-loader").style.visibility = "hidden";    
     })
     //Upload file to cloud storage
     await uploadBytes(storageRef, signUpImg).then(async (snapshot) => {
@@ -65,8 +67,9 @@ signUpForm.addEventListener('submit', async (e) => {
   } catch (error) {
     console.log('Error: ', error)
   }
-      
-})
+    
+  }); 
+
 
 //Login function
 loginForm.addEventListener('submit', async (e) => {
@@ -198,7 +201,7 @@ auth.onAuthStateChanged(user => {
   
    //Llamar al quiz
   async function getQuiz() {
-  
+    document.getElementById("quiz-loader").style.visibility = "visible";
       let response = await fetch(api);
       let data = await response.json();
   
@@ -209,6 +212,7 @@ auth.onAuthStateChanged(user => {
           mezcladas.push(data.results[i].incorrect_answers.concat(data.results[i].correct_answer))    
           
       }
+      document.getElementById("quiz-loader").style.visibility = "hidden";    
         pintar(preguntas[i], mezcladas[i], i)  
         
       }
@@ -312,13 +316,14 @@ const userRef = doc(db, 'users', auth.currentUser.email);
 
 document.getElementById("grafica").addEventListener("click", generarGrafica)
 
+
 }
 
 
   //GRAFICA//
 
   function generarGrafica(){
-
+    document.getElementById("chart-loader").style.visibility = "visible";
     let series = [score, alerta];
     let labels = ["correct", "incorrect"];
     let data = {
@@ -337,6 +342,7 @@ document.getElementById("grafica").addEventListener("click", generarGrafica)
 
 
     new Chartist.Bar(barras, data, options);
+    document.getElementById("chart-loader").style.visibility = "hidden";
 
   }
 
