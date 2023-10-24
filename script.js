@@ -71,6 +71,7 @@ signUpForm.addEventListener('submit', async (e) => {
 //Login function
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+  document.getElementById("log-loader").style.visibility = "visible";
   const loginEmail = document.getElementById('email2').value;
   const loginPassword = document.getElementById('pass3').value;
   //Call the collection in the DB
@@ -98,7 +99,7 @@ loginForm.addEventListener('submit', async (e) => {
              
             })
 
-            document.getElementById("getquiz").addEventListener("click", function () {
+            document.getElementById("results").addEventListener("click", function () {
               getScores()
                
               })
@@ -111,6 +112,8 @@ loginForm.addEventListener('submit', async (e) => {
       const errorMessage = error.message;
       console.log('Código del error: ' + errorCode);
       console.log('Mensaje del error: ' + errorMessage);
+    }).finally(() => {
+      document.getElementById("log-loader").style.visibility = "hidden";
     });
 })
 
