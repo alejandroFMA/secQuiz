@@ -93,19 +93,14 @@ loginForm.addEventListener('submit', async (e) => {
         document.getElementById("inicio").style.display="none";
          botones.innerHTML = `
                         <button id="getquiz">Go to quiz</button>
-                        <button id="results">My history</button>`
+                        <button id="results">My history</button>
+                        <button id="ranking">Top 5</button>`
         userData.innerHTML = `<h3>Welcome</h3>
                               <h5>Username:</h5> <p id ="username">${docSnap.data().username}</p>
                               <img src=${docSnap.data().profile_picture} alt='User profile picture'>`
-           document.getElementById("getquiz").addEventListener("click", function () {
-            getQuiz()
-             
-            })
-
-            document.getElementById("results").addEventListener("click", function () {
-              getScores()
-               
-              })
+          document.getElementById("getquiz").addEventListener("click", getQuiz)
+          document.getElementById("results").addEventListener("click", getScores)
+          document.getElementById("ranking").addEventListener("click", getRank)
       } else {
         console.log("No such document!");
     }})
@@ -201,6 +196,8 @@ auth.onAuthStateChanged(user => {
   
    //Llamar al quiz
   async function getQuiz() {
+    document.getElementById("progress").style.visibility="hidden";
+    document.getElementById("test").style.visibility="visible";
     document.getElementById("quiz-loader").style.visibility = "visible";
       let response = await fetch(api);
       let data = await response.json();
@@ -346,3 +343,24 @@ document.getElementById("grafica").addEventListener("click", generarGrafica)
 
   }
 
+function getScores(){
+  document.getElementById("test").style.visibility="hidden";
+  document.getElementById("progress").style.visibility="visible";
+
+  let history= document.getElementById("history")
+  history.innerHTML= `<p>Prueba</p>`
+
+
+
+}
+
+
+function getRank(){
+  document.getElementById("test").style.visibility="hidden";
+  document.getElementById("progress").style.visibility="visible";
+  let rank= document.getElementById("tabla")
+  rank.innerHTML= `<p>Prueba2</p>`
+
+
+
+}

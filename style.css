@@ -71,7 +71,7 @@ button{
     margin :0.45em;
     border-radius: 0.25em;
     font-size: large;
-    font-family: 'Pixelify Sans';
+    font-family: 'teletexto';
     background-color: black;
     cursor: pointer;
 }
@@ -183,6 +183,14 @@ div.form{
     color:orange;
 }
 
+#history p{
+    color: yellow;
+}
+
+#tabla p{
+    color: #ff00ff;
+}
+
 
 #log, #create, #finish{
     color: yellow;
@@ -190,7 +198,7 @@ div.form{
     border: none;
     padding: 10px;
     font-size: large;
-    font-family: 'Pixelify Sans';
+    font-family: 'teletexto';
     cursor: pointer;
 }
 
