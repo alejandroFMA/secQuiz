@@ -13,10 +13,9 @@ Complete our quiz and check how many answers you got right.
 ![Example question](./assets/readme2.png)
 ![Check answers and chart](./assets/readme3.png)
 
-Check your progress and compare yourself with other users. Will you make it to the top 5?
+Check your progress, will you be able to beat yourself?
 
-(captura gráfica progreso y tabla)
-
+![progress chart](./assets/readme4.png)
 
 
 ## Used in this porject:
