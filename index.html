@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TeleQuiz</title>
-    <link rel="shortcut icon" href="./media/tvretro-removebg-preview.png" type="image/tv">
+    <link rel="shortcut icon" href="./assets/tvretro-removebg-preview.png" type="image/tv">
     <link rel="stylesheet" href="style.css">
     <link href='https://fonts.googleapis.com/css?family=Pixelify Sans' rel='stylesheet'>
     <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
@@ -44,11 +44,9 @@
                     <input type="password" id="pass3" name="pass3" placeholder="Introduce password..."><br>
                     <input type="submit" value="Log in" id="log">            
                     <span class="loader" id="log-loader"></span>
-
                 </fieldset>
             </form>
             <p id="msgerr"></p>
-
         </section>
 
         <div id="botones"></div>
@@ -60,13 +58,11 @@
         </section>
 
         <section id="progress">
-            <div id="history"></div>
-            <div id="tabla"></div>
+            <div id="history">
+                <div class='.ct-chart' id="chart"></div>
+                <div class='.ct-chart' id="chart2"></div>
+            </div>
         </section>
-        
-        
-
-
         
     
     </main>
@@ -74,8 +70,8 @@
         <div id="logout-container">
             <button id="salir">Log out</button>
         </div>
-
     </footer>
+
 <!-- The core Firebase JS SDK is always required and must be listed first -->
 <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
 <!-- TODO: Add SDKs for Firebase products that you want to use
@@ -83,6 +79,5 @@
 <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-auth.js"></script>
 <script src="script.js" type="module"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>  
 </body>
 </html>

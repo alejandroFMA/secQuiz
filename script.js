@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
-import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js";
+import { getFirestore, collection, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-storage.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -22,6 +22,7 @@ const auth = getAuth();
 const user = auth.currentUser;
 //Initialize DDBB
 const db = getFirestore(app);
+
 //Initialize cloudstore
 const storage = getStorage();
 
@@ -46,6 +47,15 @@ function validatePassword(password) {
   let passFormat = /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/; //una mayuscula, una minuscula, un numero y uncaracter especial
   return passFormat.test(password);
 }
+
+auth.onAuthStateChanged(user => {
+  if (user) {
+    console.log('Usuario autenticado:', user.email);
+  } else {
+    console.log('No hay usuario autenticado');
+    
+  }
+});
 
 //SignUp function
 signUpForm.addEventListener('submit', async (e) => {
@@ -133,16 +143,13 @@ loginForm.addEventListener('submit', async (e) => {
     .then(() => {
       if (docSnap.exists()) {
         document.getElementById("inicio").style.display="none";
-         botones.innerHTML = `
-                        <button id="getquiz">Go to quiz</button>
-                        <button id="results">My history</button>
-                        <button id="ranking">Top 5</button>`
+         botones.innerHTML = `<button id="getquiz">Go to quiz</button>
+                              <button id="results">My history</button>`
         userData.innerHTML = `<h3>Welcome</h3>
                               <h5>Username:</h5> <p id ="username">${docSnap.data().username}</p>
                               <img src=${docSnap.data().profile_picture} alt='User profile picture'>`
           document.getElementById("getquiz").addEventListener("click", getQuiz)
           document.getElementById("results").addEventListener("click", getScores)
-          document.getElementById("ranking").addEventListener("click", getRank)
       } else {
         console.log("No such document!");
     }})
@@ -189,24 +196,6 @@ auth.onAuthStateChanged(user => {
   let alerta = 0;
   let numbers = [0,1,2,3]
 
-
-  async function getPoints (){
-    const docRef = doc(db, 'users', 'alex2@hotmail.com');
-    
-    try {
-        const doc = await getDoc(docRef);
-        if (doc.exists()) {
-            console.log(doc.data());
-        } else {
-            console.log("El documento no existe.");
-        }
-    } catch (error) {
-        console.error("Error al obtener el documento: ", error);
-    }
-
-  }
-
-  document.getElementById("results").addEventListener("click", getPoints());
 
   
   //conseguir preguntas random
@@ -256,7 +245,7 @@ auth.onAuthStateChanged(user => {
    //Llamar al quiz
   async function getQuiz() {
     document.getElementById("progress").style.visibility="hidden";
-    document.getElementById("test").style.visibility="visible";
+    document.getElementById("test").style.display= "flex";
     document.getElementById("quiz-loader").style.visibility = "visible";
       let response = await fetch(api);
       let data = await response.json();
@@ -279,7 +268,6 @@ auth.onAuthStateChanged(user => {
       function comprobarYPasar(event){
           event.preventDefault();
           const respuestaUsuario = document.querySelector(`input[name=n${i}]:checked`).value
-          console.log("respuestaUsuario es " + respuestaUsuario)
   
           if (respuestaUsuario == correctas[i]){
               score++
@@ -289,15 +277,16 @@ auth.onAuthStateChanged(user => {
               finales.push(respuestaUsuario)
           }
           i++
-          pintar(preguntas[i], mezcladas[i], i)
-        
-          if(i==9){
+          setTimeout(() => {
+            pintar(preguntas[i], mezcladas[i], i)
+            if(i==9){
               document.querySelector("#next").remove()
-          }
+            }
+          }, 1000);
   }
   
   // validar quiz
-    function validar(event){
+   function validar(event){
       event.preventDefault();
 
       const respuestaUsuario = document.querySelector(`input[name=n${i}]:checked`).value
@@ -308,9 +297,7 @@ auth.onAuthStateChanged(user => {
         alerta++
         finales.push(respuestaUsuario)
     }
-
-      console.log(finales)
-
+    
       document.getElementById("quiz").remove()
 
       let contenedor = document.getElementById("test")
@@ -342,43 +329,44 @@ auth.onAuthStateChanged(user => {
       <br>
       <li id="a9">Question: ${preguntas[9]},<br> correct answer: ${correctas[9]} ,<br> your answer: ${finales[9]}</li>
       </ol>
-      <button id="grafica">My scores</button>
-      <div class='.ct-chart' id="chart"></div>
-      `
+      <button id="grafica">My scores</button>`
     
       contenedor.appendChild(aviso)
 
-for (let j = 0; j < correctas.length; j++) {
-  if(finales[j]==correctas[j]){
-    document.getElementById(`a${j}`).style.color = "green"
-  } else{
-    document.getElementById(`a${j}`).style.color = "red"
-  }
+    for (let j = 0; j < correctas.length; j++) {
+      if(finales[j]==correctas[j]){
+        document.getElementById(`a${j}`).style.color = "green"
+      } else{
+        document.getElementById(`a${j}`).style.color = "red"
+      }
+      
+    }
+    
+  const userRef = doc(db, 'users', auth.currentUser.email);
+
+  getDoc(userRef).then((doc) => {
+   
+    const puntuaciones = doc.data().puntuacion || [];
   
+    puntuaciones.push(score);
+
+    updateDoc(userRef, {
+      puntuacion: puntuaciones
+    }).then(() => {
+      console.log("Document successfully updated!");
+    }).catch((error) => {
+      console.error("Error updating document: ", error);
+    });
+  });
+
+  document.getElementById("grafica").addEventListener("click", generarGrafica)
 }
 
-
-console.log(alerta);
-
-const userRef = doc(db, 'users', auth.currentUser.email);
-  updateDoc(userRef, {
-  puntuacion: arrayUnion(score)
-})
-.then(() => {
-    console.log("Document successfully updated!");
-})
-.catch((error) => {
-    console.error("Error updating document: ", error);
-});
-
-
-document.getElementById("grafica").addEventListener("click", generarGrafica)
-
-}
 
   //GRAFICA//
 
   function generarGrafica(){
+    document.getElementById("chart").style.visibility="visible";
     let series = [score, alerta];
     let labels = ["correct", "incorrect"];
     let data = {
@@ -401,25 +389,40 @@ document.getElementById("grafica").addEventListener("click", generarGrafica)
 
   }
 
-function getScores(){
-  document.getElementById("test").style.visibility="hidden";
-  document.getElementById("progress").style.visibility="visible";
-
-  let history= document.getElementById("history")
-  history.innerHTML= `<p>Prueba</p>`
-
-
-
-}
-
-
-function getRank(){
-  document.getElementById("test").style.visibility="hidden";
-  document.getElementById("progress").style.visibility="visible";
-  let rank= document.getElementById("tabla")
-  rank.innerHTML= `<p>Prueba2</p>`
-
-
-
-}
-
+  async function getScores(event){
+    event.preventDefault()
+ 
+    document.getElementById("progress").style.visibility="visible";
+  
+    let lineas = document.getElementById("chart2")
+  console.log(auth.currentUser.email)
+    const docRef = doc(db, 'users', auth.currentUser.email);
+    
+    try {
+      const doc = await getDoc(docRef);
+      console.log(doc, docRef, doc.data())
+      if (doc.exists()) {
+  
+        let intentos = doc.data().puntuacion.map((elemento, indice) => indice+1);
+  
+        var data = {
+          labels: intentos,
+          series: [doc.data().puntuacion]
+        };
+        var options = {
+          high: 10,
+          axisY: {
+            onlyInteger: true
+       }
+      };
+        
+        new Chartist.Line(lineas, data, options);
+    
+      } else {
+          console.log("El documento no existe.");
+      }
+    } catch (error) {
+      console.error("Error al obtener el documento: ", error);
+    }
+  
+  }
