@@ -71,7 +71,7 @@ button{
     margin :0.45em;
     border-radius: 0.25em;
     font-size: large;
-    font-family: 'Pixelify Sans';
+    font-family: 'teletexto';
     background-color: black;
     cursor: pointer;
 }
@@ -185,6 +185,14 @@ div.form{
     color:orange;
 }
 
+#history p{
+    color: yellow;
+}
+
+#tabla p{
+    color: #ff00ff;
+}
+
 
 #log, #create, #finish{
     color: yellow;
@@ -192,7 +200,7 @@ div.form{
     border: none;
     padding: 10px;
     font-size: large;
-    font-family: 'Pixelify Sans';
+    font-family: 'teletexto';
     cursor: pointer;
 }
 
@@ -200,23 +208,28 @@ div.form{
     background-color: red;
 }
 
-#chart, #chart >svg {
+#chart, #chart >svg, #chart2, #chart2 >svg {
     width: 80%;
     height: 300px;
 }
 
-#chart .ct-grid{
+#chart .ct-grid, #chart2 .ct-grid{
     stroke: rgb(255 255 255 / 94%);
     stroke-dasharray: none;
 }
 
-#chart .ct-labels span{
+#chart .ct-labels span, #chart2 .ct-labels span{
     color: white;
 }
 
 #chart .ct-series-a .ct-bar{
     stroke: yellow;
     stroke-width: 50px;
+}
+
+#chart2 .ct-series-a .ct-line{
+    stroke-width: 5px;
+    stroke: yellow;
 }
 
 
