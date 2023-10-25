@@ -30,6 +30,7 @@ const signUpForm = document.getElementById('form1');
 const loginForm = document.getElementById('form2');
 const logout = document.getElementById('salir');
 const botones = document.getElementById('botones');
+const userData = document.getElementById('user-data');
 
 function validateEmail(email) {
   let mailformat = /^[\w-_\.]+@([\w-]+\.)+[\w-]{2,4}$/; //letras y numeros guiones y dos o 4 letras al final
@@ -49,11 +50,14 @@ function validatePassword(password) {
 //SignUp function
 signUpForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+  document.getElementById("sign-loader").style.visibility = "visible";    
   const signUpEmail = document.getElementById('email').value;
   const signUpPassword = document.getElementById('pass').value;
   const signUpUser = document.getElementById('signup-user').value;
   const usersRef = collection(db, "users");
-  const storageRef = ref(storage)
+  const signUpImg = document.getElementById('signup-picture').files[0];
+  const storageRef = ref(storage, signUpImg.name);
+  let publicImageUrl;
   
   if (!validateEmail(signUpEmail)) {
     alert("Has ingresado una dirección de correo electrónico inválida.");
@@ -78,23 +82,31 @@ signUpForm.addEventListener('submit', async (e) => {
       const user = userCredential.user;
       
       signUpForm.reset();
+      document.getElementById("sign-loader").style.visibility = "hidden";    
+    })
+    //Upload file to cloud storage
+    await uploadBytes(storageRef, signUpImg).then(async (snapshot) => {
+      console.log('Uploaded a blob or file!')
+      publicImageUrl= await getDownloadURL(storageRef);
     })
     //Create document in DB
     await setDoc(doc(usersRef, signUpEmail), {
       username: signUpUser,
       email: signUpEmail,
-      puntuacion: 0
-
+      puntuacion: 0,
+      profile_picture: publicImageUrl
     })
   } catch (error) {
     console.log('Error: ', error)
   }
-      
-})
+    
+  }); 
+
 
 //Login function
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+  document.getElementById("log-loader").style.visibility = "visible";
   const loginEmail = document.getElementById('email2').value;
   const loginPassword = document.getElementById('pass3').value;
   //Call the collection in the DB
@@ -102,19 +114,16 @@ loginForm.addEventListener('submit', async (e) => {
   //Search a document that matches with our ref
   const docSnap = await getDoc(docRef);
 
-
   if (!validateEmail(loginEmail)) {
     alert("Has ingresado una dirección de correo electrónico inválida.");
     return;
   }
-
 
   if (!validatePassword(loginPassword)) {
     alert("Has ingresado un password inválido.");
     return;
   }
 
- 
   signInWithEmailAndPassword(auth, loginEmail, loginPassword)
     .then((userCredential) => {
       console.log('User authenticated')
@@ -123,20 +132,17 @@ loginForm.addEventListener('submit', async (e) => {
     })
     .then(() => {
       if (docSnap.exists()) {
+        document.getElementById("inicio").style.display="none";
          botones.innerHTML = `
                         <button id="getquiz">Go to quiz</button>
-                        <button id="results">My history</button>`
-            
-           document.getElementById("getquiz").addEventListener("click", function () {
-            getQuiz()
-            document.getElementById("inicio").style.display="none"; 
-            })
-
-          document.getElementById("getquiz").addEventListener("click", function () {
-              getScores()
-              document.getElementById("inicio").style.display="none"; 
-            })
-
+                        <button id="results">My history</button>
+                        <button id="ranking">Top 5</button>`
+        userData.innerHTML = `<h3>Welcome</h3>
+                              <h5>Username:</h5> <p id ="username">${docSnap.data().username}</p>
+                              <img src=${docSnap.data().profile_picture} alt='User profile picture'>`
+          document.getElementById("getquiz").addEventListener("click", getQuiz)
+          document.getElementById("results").addEventListener("click", getScores)
+          document.getElementById("ranking").addEventListener("click", getRank)
       } else {
         console.log("No such document!");
     }})
@@ -146,6 +152,8 @@ loginForm.addEventListener('submit', async (e) => {
       const errorMessage = error.message;
       console.log('Código del error: ' + errorCode);
       console.log('Mensaje del error: ' + errorMessage);
+    }).finally(() => {
+      document.getElementById("log-loader").style.visibility = "hidden";
     });
 })
 
@@ -180,6 +188,7 @@ auth.onAuthStateChanged(user => {
   let score = 0;
   let alerta = 0;
   let numbers = [0,1,2,3]
+
 
   async function getPoints (){
     const docRef = doc(db, 'users', 'alex2@hotmail.com');
@@ -246,7 +255,7 @@ auth.onAuthStateChanged(user => {
   
    //Llamar al quiz
   async function getQuiz() {
-  
+    document.getElementById("quiz-loader").style.visibility = "visible";
       let response = await fetch(api);
       let data = await response.json();
   
@@ -257,6 +266,7 @@ auth.onAuthStateChanged(user => {
           mezcladas.push(data.results[i].incorrect_answers.concat(data.results[i].correct_answer))    
           
       }
+      document.getElementById("quiz-loader").style.visibility = "hidden";    
         pintar(preguntas[i], mezcladas[i], i)  
         
       }
@@ -331,6 +341,7 @@ auth.onAuthStateChanged(user => {
       <li id="a9">Question: ${preguntas[9]},<br> correct answer: ${correctas[9]} ,<br> your answer: ${finales[9]}</li>
       </ol>
       <button id="grafica">My scores</button>
+      <div class='.ct-chart' id="chart"></div>
       `
     
       contenedor.appendChild(aviso)
@@ -343,6 +354,8 @@ for (let j = 0; j < correctas.length; j++) {
   }
   
 }
+
+
 console.log(alerta);
 
 const userRef = doc(db, 'users', auth.currentUser.email);
@@ -364,7 +377,6 @@ document.getElementById("grafica").addEventListener("click", generarGrafica)
   //GRAFICA//
 
   function generarGrafica(){
-
     let series = [score, alerta];
     let labels = ["correct", "incorrect"];
     let data = {
@@ -383,6 +395,8 @@ document.getElementById("grafica").addEventListener("click", generarGrafica)
 
 
     new Chartist.Bar(barras, data, options);
+    document.getElementById("grafica").remove()
+
   }
- 
+
 

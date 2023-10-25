@@ -12,6 +12,7 @@
 <body>
     <header>
         <h2>TeleQuiz</h2>
+        <div id="user-data"></div>
     </header>
     <main>
         <section id="inicio">
@@ -25,8 +26,11 @@
                     <label for="pass">Password:</label><br>
                     <input type="password" id="pass" name="pass" placeholder="Introduce password..."><br>
                     <label for="pass2">Repeat password:</label><br>
-                    <input type="password" id="pass2" name="pass2" placeholder="Repite password..."><br><br>
-                    <input type="submit" value="Create" id="create">
+                    <input type="password" id="pass2" name="pass2" placeholder="Repite password..."><br>
+                    <label for="signup-picture">Picture: </label><br>
+                    <input type="file" id="signup-picture" accept="image/*" name="signup-picture"><br><br>
+                    <input type="submit" value="Create" id="create">   
+                    <span class="loader" id="sign-loader"></span>               
                 </fieldset>
             </form>
 
@@ -38,20 +42,29 @@
                     <input type="email" id="email2" name="email2" placeholder="Introduce email..."><br>
                     <label for="pass3">Password:</label><br>
                     <input type="password" id="pass3" name="pass3" placeholder="Introduce password..."><br>
-                    <input type="submit" value="Log in" id="log">
+                    <input type="submit" value="Log in" id="log">            
+                    <span class="loader" id="log-loader"></span>
+
                 </fieldset>
             </form>
             <p id="msgerr"></p>
-            <div id="botones"></div>
+
         </section>
+
+        <div id="botones"></div>
+        <span class="loader" id="quiz-loader"></span>  
     
         <section id="test">
             <form id="quiz">
             </form>
-           
         </section>
- 
-        <div class='.ct-chart' id="chart"></div>
+
+        
+        
+        
+
+
+        
     
     </main>
     <footer>
