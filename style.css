@@ -141,6 +141,14 @@ div.form{
     text-align: center;
 }
 
+#logout-container{
+    position:fixed;
+    bottom:0.45em;
+    right: 0.45em;
+    padding: 0.45em;
+    border-radius: 0.23em;
+}
+
 #form1, #form2{
     text-align: center;
     padding: 20px 50px;
