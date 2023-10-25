@@ -61,9 +61,11 @@ input{
 }
 
 article{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     color: white;
 }
-
 
 button{
     color: rgb(2, 237, 2);
@@ -71,7 +73,7 @@ button{
     margin :0.45em;
     border-radius: 0.25em;
     font-size: large;
-    font-family: 'Pixelify Sans';
+    font-family: 'teletexto';
     background-color: black;
     cursor: pointer;
 }
@@ -80,11 +82,6 @@ button:active{
     background-color: greenyellow;;
 }
 
-article{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
 
 fieldset.question{
     padding: 0.9em;
@@ -133,21 +130,14 @@ div.form{
     justify-content: space-around;
 }
 
-#msgerr{
-    color: red;
-}
-
 #botones{
     text-align: center;
 }
 
-#logout-container{
-    position:fixed;
-    bottom:0.45em;
-    right: 0.45em;
-    padding: 0.45em;
-    border-radius: 0.23em;
+#msgerr{
+    color: red;
 }
+
 
 #form1, #form2{
     text-align: center;
@@ -165,6 +155,13 @@ div.form{
     background-color: white;
 }
 
+#logout-container{
+    position:fixed;
+    bottom:0.45em;
+    right: 0.45em;
+    padding: 0.45em;
+    border-radius: 0.23em;
+}
 
 #user-data{
     border: dashed 1px yellowgreen;
@@ -174,15 +171,15 @@ div.form{
     width:50%;
     margin: auto;
 }
+
+#username{
+    color:orange;
+}
+
 #user-data > img{
     width: 25%;
     margin-bottom: 20px;
     border-radius: 80px;
-}
-
-
-#username{
-    color:orange;
 }
 
 
@@ -192,7 +189,7 @@ div.form{
     border: none;
     padding: 10px;
     font-size: large;
-    font-family: 'Pixelify Sans';
+    font-family: 'teletexto';
     cursor: pointer;
 }
 
@@ -200,23 +197,28 @@ div.form{
     background-color: red;
 }
 
-#chart, #chart >svg {
+#chart, #chart >svg, #chart2, #chart2 >svg {
     width: 80%;
     height: 300px;
 }
 
-#chart .ct-grid{
+#chart .ct-grid, #chart2 .ct-grid{
     stroke: rgb(255 255 255 / 94%);
     stroke-dasharray: none;
 }
 
-#chart .ct-labels span{
+#chart .ct-labels span, #chart2 .ct-labels span{
     color: white;
 }
 
 #chart .ct-series-a .ct-bar{
     stroke: yellow;
     stroke-width: 50px;
+}
+
+#chart2 .ct-series-a .ct-line{
+    stroke-width: 5px;
+    stroke: yellow;
 }
 
 
@@ -263,7 +265,6 @@ div.form{
 #log-loader{
     margin-top: 25px;
 }
-
 
 @media only screen and (max-width: 965px) {
     /*index*/
