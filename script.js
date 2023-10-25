@@ -22,6 +22,7 @@ const auth = getAuth();
 const user = auth.currentUser;
 //Initialize DDBB
 const db = getFirestore(app);
+
 //Initialize cloudstore
 const storage = getStorage();
 
@@ -141,6 +142,7 @@ loginForm.addEventListener('submit', async (e) => {
     })
     .then(() => {
       if (docSnap.exists()) {
+
         document.getElementById("inicio").style.display = "none";
         botones.innerHTML = `
                         <button id="getquiz">Go to quiz</button>
@@ -187,31 +189,32 @@ auth.onAuthStateChanged(user => {
 
 
 //variables
-const api = 'https://opentdb.com/api.php?amount=10&category=14&type=multiple'
 
-const preguntas = []
-const correctas = []
-const mezcladas = []
-let finales = []
-let i = 0;
-let score = 0;
-let alerta = 0;
-let numbers = [0, 1, 2, 3]
+  const api = 'https://opentdb.com/api.php?amount=10&category=14&type=multiple' 
+  
+  const preguntas = [] 
+  const correctas =[]
+  const mezcladas = []
+  let finales= []
+  let i = 0;
+  let score = 0;
+  let alerta = 0;
+  let numbers = [0,1,2,3]
+  
+  //conseguir preguntas random
+  function caos(array) {
+      array.sort(() => Math.random() - 0.5);
+      return array
+    }
+  
 
-//conseguir preguntas random
-function caos(array) {
-  array.sort(() => Math.random() - 0.5);
-  return array
-}
-
-
-//pintar preguntas en el DOM
-function pintar(pregunta, mezcladas, i) {
-  let rnd = caos(numbers)
-  let template = document.getElementById("quiz")
-
-  template.innerHTML =
-    `<fieldset class="question" id="${[i]}">
+  //pintar preguntas en el DOM
+  function pintar(pregunta, mezcladas, i){
+      let rnd = caos(numbers)
+      let template = document.getElementById("quiz") 
+      
+       template.innerHTML = 
+      `<fieldset class="question" id="${[i]}">
           <legend>${pregunta}</legend>
           <div class = "form">
           <input type="radio" name="n${i}" value="${mezcladas[rnd[0]]}" id= "a${i}"  required>
@@ -236,6 +239,7 @@ function pintar(pregunta, mezcladas, i) {
   if (i < 9) {
     document.getElementById("finish").style.display = "none"
   }
+
   document.querySelector("#next").addEventListener("click", comprobarYPasar);
   document.querySelector("#finish").addEventListener("click", validar)
 }
@@ -297,8 +301,6 @@ function validar(event) {
     finales.push(respuestaUsuario)
   }
 
-  console.log(finales)
-
   document.getElementById("quiz").remove()
 
   let contenedor = document.getElementById("test")
@@ -330,21 +332,19 @@ function validar(event) {
       <br>
       <li id="a9">Question: ${preguntas[9]},<br> correct answer: ${correctas[9]} ,<br> your answer: ${finales[9]}</li>
       </ol>
-      <button id="grafica">My scores</button>
-      <div class='.ct-chart' id="chart"></div>
-      `
+      <button id="grafica">My scores</button>`
+    
+      contenedor.appendChild(aviso)
 
-  contenedor.appendChild(aviso)
-
-  for (let j = 0; j < correctas.length; j++) {
-    if (finales[j] == correctas[j]) {
-      document.getElementById(`a${j}`).style.color = "green"
-    } else {
-      document.getElementById(`a${j}`).style.color = "red"
+    for (let j = 0; j < correctas.length; j++) {
+      if(finales[j]==correctas[j]){
+        document.getElementById(`a${j}`).style.color = "green"
+      } else{
+        document.getElementById(`a${j}`).style.color = "red"
+      }
+      
     }
-
-  }
-
+    
   const userRef = doc(db, 'users', auth.currentUser.email);
 
   getDoc(userRef).then((doc) => {
@@ -362,70 +362,71 @@ function validar(event) {
     });
   });
 
-
   document.getElementById("grafica").addEventListener("click", generarGrafica)
-  
 }
 
-//GRAFICA//
+  //GRAFICA//
 
-function generarGrafica() {
-  let series = [score, alerta];
-  let labels = ["correct", "incorrect"];
-  let data = {
+  function generarGrafica(){
+    document.getElementById("chart").style.visibility="visible";
+    let series = [score, alerta];
+    let labels = ["correct", "incorrect"];
+    let data = {
     labels: labels,
     series: [series]
-  };
-
-  var options = {
-    high: 10,
-    axisY: {
-      onlyInteger: true
-    }
-  };
-
-  let barras = document.getElementById("chart")
-
-
-  new Chartist.Bar(barras, data, options);
-  document.getElementById("grafica").remove()
-
-}
-
-async function getScores(event){
-  event.preventDefault()
-
-  document.getElementById("progress").style.visibility="visible";
-
-  let lineas = document.getElementById("chart2")
-console.log(auth.currentUser.email)
-  const docRef = doc(db, 'users', auth.currentUser.email);
+    };
   
-  try {
-    const doc = await getDoc(docRef);
-    console.log(doc, docRef, doc.data())
-    if (doc.exists()) {
-
-      let intentos = doc.data().puntuacion.map((elemento, indice) => indice+1);
-
-      var data = {
-        labels: intentos,
-        series: [doc.data().puntuacion]
-      };
-      var options = {
+    var options = {
         high: 10,
         axisY: {
           onlyInteger: true
      }
     };
-      
-      new Chartist.Line(lineas, data, options);
   
-    } else {
-        console.log("El documento no existe.");
-    }
-  } catch (error) {
-    console.error("Error al obtener el documento: ", error);
+    let barras = document.getElementById("chart")
+
+
+    new Chartist.Bar(barras, data, options);
+    document.getElementById("grafica").remove()
+
   }
 
-}
+
+  async function getScores(event){
+    event.preventDefault()
+ 
+    document.getElementById("progress").style.visibility="visible";
+  
+    let lineas = document.getElementById("chart2")
+  console.log(auth.currentUser.email)
+    const docRef = doc(db, 'users', auth.currentUser.email);
+    
+    try {
+      const doc = await getDoc(docRef);
+      console.log(doc, docRef, doc.data())
+      if (doc.exists()) {
+  
+        let intentos = doc.data().puntuacion.map((elemento, indice) => indice+1);
+  
+        var data = {
+          labels: intentos,
+          series: [doc.data().puntuacion]
+        };
+        var options = {
+          high: 10,
+          axisY: {
+            onlyInteger: true
+       }
+      };
+        
+        new Chartist.Line(lineas, data, options);
+    
+      } else {
+          console.log("El documento no existe.");
+      }
+    } catch (error) {
+      console.error("Error al obtener el documento: ", error);
+    }
+  
+  }
+
