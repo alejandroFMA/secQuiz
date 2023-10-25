@@ -21,14 +21,14 @@ body {
 header{
     width: 80%;
     text-align: center;
-    margin: auto;
+    margin: 60px auto;
     
 }
 
 main{
     width:80%;
     margin:20px auto;
-    display: flex;
+   
     flex-wrap: wrap;
     justify-content: center;
 }
@@ -41,6 +41,10 @@ h2{
 h3{
     text-align: center;
     color: #00ffff;
+}
+
+h5{
+    color: yellow;
 }
 
 legend{
@@ -57,9 +61,11 @@ input{
 }
 
 article{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     color: white;
 }
-
 
 button{
     color: rgb(2, 237, 2);
@@ -67,7 +73,7 @@ button{
     margin :0.45em;
     border-radius: 0.25em;
     font-size: large;
-    font-family: 'Pixelify Sans';
+    font-family: 'teletexto';
     background-color: black;
     cursor: pointer;
 }
@@ -75,6 +81,7 @@ button{
 button:active{
     background-color: greenyellow;;
 }
+
 
 fieldset.question{
     padding: 0.9em;
@@ -123,6 +130,14 @@ div.form{
     justify-content: space-around;
 }
 
+#botones{
+    text-align: center;
+}
+
+#msgerr{
+    color: red;
+}
+
 
 #form1, #form2{
     text-align: center;
@@ -135,10 +150,37 @@ div.form{
     padding: 50px 70px;
 }
 
-#salir{
-    text-align: center;
+
+#signup-picture{
+    background-color: white;
 }
 
+#logout-container{
+    position:fixed;
+    bottom:0.45em;
+    right: 0.45em;
+    padding: 0.45em;
+    border-radius: 0.23em;
+}
+
+#user-data{
+    border: dashed 1px yellowgreen;
+    border-radius: 2px ;
+    max-height: 20%;
+    font-size: medium;
+    width:50%;
+    margin: auto;
+}
+
+#username{
+    color:orange;
+}
+
+#user-data > img{
+    width: 25%;
+    margin-bottom: 20px;
+    border-radius: 80px;
+}
 
 #log, #create, #finish{
     color: yellow;
@@ -146,7 +188,7 @@ div.form{
     border: none;
     padding: 10px;
     font-size: large;
-    font-family: 'Pixelify Sans';
+    font-family: 'teletexto';
     cursor: pointer;
 }
 
@@ -154,29 +196,76 @@ div.form{
     background-color: red;
 }
 
-
-#chart .ct-chart {
-    background-color: cyan;
-    margin: 50px auto;
+#chart, #chart >svg, #chart2, #chart2 >svg {
+    width: 80%;
+    height: 300px;
 }
 
-
-#chart .ct-grid{
+#chart .ct-grid, #chart2 .ct-grid{
     stroke: rgb(255 255 255 / 94%);
     stroke-dasharray: none;
 }
 
-#chart .ct-labels span{
+#chart .ct-labels span, #chart2 .ct-labels span{
     color: white;
 }
 
 #chart .ct-series-a .ct-bar{
     stroke: yellow;
+    stroke-width: 50px;
+}
+
+#chart2 .ct-series-a .ct-line{
     stroke-width: 5px;
+    stroke: yellow;
 }
 
 
-@media only screen and (max-width: 768px) {
+.loader {
+    font-size: 10px;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    display: block;
+    animation: mulShdSpin 1.1s infinite ease;
+    transform: translateZ(0);
+    visibility: hidden; 
+    margin: 20px auto;
+    
+  }
+  @keyframes mulShdSpin {
+    0%,
+    100% {
+      box-shadow: 0em -2.6em 0em 0em #ffffff, 1.8em -1.8em 0 0em rgba(255,255,255, 0.2), 2.5em 0em 0 0em rgba(255,255,255, 0.2), 1.75em 1.75em 0 0em rgba(255,255,255, 0.2), 0em 2.5em 0 0em rgba(255,255,255, 0.2), -1.8em 1.8em 0 0em rgba(255,255,255, 0.2), -2.6em 0em 0 0em rgba(255,255,255, 0.5), -1.8em -1.8em 0 0em rgba(255,255,255, 0.7);
+    }
+    12.5% {
+      box-shadow: 0em -2.6em 0em 0em rgba(255,255,255, 0.7), 1.8em -1.8em 0 0em #ffffff, 2.5em 0em 0 0em rgba(255,255,255, 0.2), 1.75em 1.75em 0 0em rgba(255,255,255, 0.2), 0em 2.5em 0 0em rgba(255,255,255, 0.2), -1.8em 1.8em 0 0em rgba(255,255,255, 0.2), -2.6em 0em 0 0em rgba(255,255,255, 0.2), -1.8em -1.8em 0 0em rgba(255,255,255, 0.5);
+    }
+    25% {
+      box-shadow: 0em -2.6em 0em 0em rgba(255,255,255, 0.5), 1.8em -1.8em 0 0em rgba(255,255,255, 0.7), 2.5em 0em 0 0em #ffffff, 1.75em 1.75em 0 0em rgba(255,255,255, 0.2), 0em 2.5em 0 0em rgba(255,255,255, 0.2), -1.8em 1.8em 0 0em rgba(255,255,255, 0.2), -2.6em 0em 0 0em rgba(255,255,255, 0.2), -1.8em -1.8em 0 0em rgba(255,255,255, 0.2);
+    }
+    37.5% {
+      box-shadow: 0em -2.6em 0em 0em rgba(255,255,255, 0.2), 1.8em -1.8em 0 0em rgba(255,255,255, 0.5), 2.5em 0em 0 0em rgba(255,255,255, 0.7), 1.75em 1.75em 0 0em #ffffff, 0em 2.5em 0 0em rgba(255,255,255, 0.2), -1.8em 1.8em 0 0em rgba(255,255,255, 0.2), -2.6em 0em 0 0em rgba(255,255,255, 0.2), -1.8em -1.8em 0 0em rgba(255,255,255, 0.2);
+    }
+    50% {
+      box-shadow: 0em -2.6em 0em 0em rgba(255,255,255, 0.2), 1.8em -1.8em 0 0em rgba(255,255,255, 0.2), 2.5em 0em 0 0em rgba(255,255,255, 0.5), 1.75em 1.75em 0 0em rgba(255,255,255, 0.7), 0em 2.5em 0 0em #ffffff, -1.8em 1.8em 0 0em rgba(255,255,255, 0.2), -2.6em 0em 0 0em rgba(255,255,255, 0.2), -1.8em -1.8em 0 0em rgba(255,255,255, 0.2);
+    }
+    62.5% {
+      box-shadow: 0em -2.6em 0em 0em rgba(255,255,255, 0.2), 1.8em -1.8em 0 0em rgba(255,255,255, 0.2), 2.5em 0em 0 0em rgba(255,255,255, 0.2), 1.75em 1.75em 0 0em rgba(255,255,255, 0.5), 0em 2.5em 0 0em rgba(255,255,255, 0.7), -1.8em 1.8em 0 0em #ffffff, -2.6em 0em 0 0em rgba(255,255,255, 0.2), -1.8em -1.8em 0 0em rgba(255,255,255, 0.2);
+    }
+    75% {
+      box-shadow: 0em -2.6em 0em 0em rgba(255,255,255, 0.2), 1.8em -1.8em 0 0em rgba(255,255,255, 0.2), 2.5em 0em 0 0em rgba(255,255,255, 0.2), 1.75em 1.75em 0 0em rgba(255,255,255, 0.2), 0em 2.5em 0 0em rgba(255,255,255, 0.5), -1.8em 1.8em 0 0em rgba(255,255,255, 0.7), -2.6em 0em 0 0em #ffffff, -1.8em -1.8em 0 0em rgba(255,255,255, 0.2);
+    }
+    87.5% {
+      box-shadow: 0em -2.6em 0em 0em rgba(255,255,255, 0.2), 1.8em -1.8em 0 0em rgba(255,255,255, 0.2), 2.5em 0em 0 0em rgba(255,255,255, 0.2), 1.75em 1.75em 0 0em rgba(255,255,255, 0.2), 0em 2.5em 0 0em rgba(255,255,255, 0.2), -1.8em 1.8em 0 0em rgba(255,255,255, 0.5), -2.6em 0em 0 0em rgba(255,255,255, 0.7), -1.8em -1.8em 0 0em #ffffff;
+    }
+  }
+
+#log-loader{
+    margin-top: 25px;
+}
+
+@media only screen and (max-width: 965px) {
     /*index*/
 
     header{
@@ -192,11 +281,23 @@ div.form{
     form{
         margin: auto;
     }
+    article{
+        width: 90%;
+        margin: auto;
+    }
     fieldset.question{
         flex: 100%;
         max-width: 100%;
         height: max-content;
     }
+    div.ct-chart{
+        width: 80%;
+        margin: auto;
+    }
+    #user-data{
+        width: 70%;
+    }
+    
 }
 
 @media only screen and (max-width: 550px){
@@ -209,11 +310,22 @@ div.form{
         border: red dashed 1px;
         display: block;
     }
+    svg.ct-chart-bar{
+        width: 60%;
+        margin: auto;
+    }
     #form1 > fieldset, #form2 > fieldset{
         padding: 10px 20px;
     }
     article{
         margin: auto;
         max-width: 90%;
+    }
+    #user-data{
+        width: 100%;
+    }
+    #chart, #chart >svg {
+        width: 90%;
+        height: 300px;
     }
 }

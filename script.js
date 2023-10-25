@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
 import { getFirestore, collection, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-storage.js";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -22,6 +22,7 @@ const auth = getAuth();
 const user = auth.currentUser;
 //Initialize DDBB
 const db = getFirestore(app);
+
 //Initialize cloudstore
 const storage = getStorage();
 
@@ -30,43 +31,108 @@ const signUpForm = document.getElementById('form1');
 const loginForm = document.getElementById('form2');
 const logout = document.getElementById('salir');
 const botones = document.getElementById('botones');
+const userData = document.getElementById('user-data');
+
+function validateEmail(email) {
+  let mailformat = /^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/; //letras y numeros guiones y dos o 4 letras al final
+  return mailformat.test(email);
+}
+
+function validateUser(user1) {
+  let mailformat = /^[A-Za-z0-9_-]{1,8}$/; // de 1 a 8 caracteres, alfanumérico
+  return mailformat.test(user1);
+}
+
+function validatePassword(password) {
+  let passFormat = /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{7,})\S$/; //una mayuscula, una minuscula, un numero y uncaracter especial
+  return passFormat.test(password);
+}
+
+auth.onAuthStateChanged(user => {
+  if (user) {
+    console.log('Usuario autenticado:', user.email);
+  } else {
+    console.log('No hay usuario autenticado');
+    
+  }
+});
 
 //SignUp function
 signUpForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+  document.getElementById("sign-loader").style.visibility = "visible";
   const signUpEmail = document.getElementById('email').value;
   const signUpPassword = document.getElementById('pass').value;
   const signUpUser = document.getElementById('signup-user').value;
   const usersRef = collection(db, "users");
-  const storageRef = ref(storage)
+  const signUpImg = document.getElementById('signup-picture').files[0];
+  const storageRef = ref(storage, signUpImg.name);
+  let publicImageUrl;
+
+  if (!validateEmail(signUpEmail)) {
+    alert("Has ingresado una dirección de correo electrónico inválida.");
+    return;
+  }
+
+  if (!validateUser(signUpUser)) {
+    alert("Has ingresado un user inválido");
+    return;
+  }
+
+  if (!validatePassword(signUpPassword)) {
+    alert("Has ingresado un password inválido.");
+    return;
+  }
+
   try {
     //Create auth user
     await createUserWithEmailAndPassword(auth, signUpEmail, signUpPassword)
-    .then((userCredential) => {
-      console.log('User registered')
-      const user = userCredential.user;
-      signUpForm.reset();
+      .then((userCredential) => {
+        console.log('User registered')
+        const user = userCredential.user;
+
+        signUpForm.reset();
+        document.getElementById("sign-loader").style.visibility = "hidden";
+      })
+    //Upload file to cloud storage
+    await uploadBytes(storageRef, signUpImg).then(async (snapshot) => {
+      console.log('Uploaded a blob or file!')
+      publicImageUrl = await getDownloadURL(storageRef);
     })
     //Create document in DB
     await setDoc(doc(usersRef, signUpEmail), {
       username: signUpUser,
-      email: signUpEmail
+      email: signUpEmail,
+      puntuacion: 0,
+      profile_picture: publicImageUrl
     })
   } catch (error) {
     console.log('Error: ', error)
   }
-      
-})
+
+});
+
 
 //Login function
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+  document.getElementById("log-loader").style.visibility = "visible";
   const loginEmail = document.getElementById('email2').value;
   const loginPassword = document.getElementById('pass3').value;
   //Call the collection in the DB
   const docRef = doc(db, "users", loginEmail);
   //Search a document that matches with our ref
   const docSnap = await getDoc(docRef);
+
+  if (!validateEmail(loginEmail)) {
+    alert("Has ingresado una dirección de correo electrónico inválida.");
+    return;
+  }
+
+  if (!validatePassword(loginPassword)) {
+    alert("Has ingresado un password inválido.");
+    return;
+  }
 
   signInWithEmailAndPassword(auth, loginEmail, loginPassword)
     .then((userCredential) => {
@@ -76,28 +142,29 @@ loginForm.addEventListener('submit', async (e) => {
     })
     .then(() => {
       if (docSnap.exists()) {
-         botones.innerHTML = `
-                        <button id="getquiz">Go to quiz</button>
-                        <button id="results">My scores</button>`
-            
-           document.getElementById("getquiz").addEventListener("click", function () {
-            getQuiz()
-            document.getElementById("inicio").style.display="none"; 
-            })
 
-            document.getElementById("getquiz").addEventListener("click", function () {
-              getScores()
-              document.getElementById("inicio").style.display="none"; 
-              })
+        document.getElementById("inicio").style.display = "none";
+        botones.innerHTML = `
+                        <button id="getquiz">Go to quiz</button>
+                        <button id="results">My history</button>`
+        userData.innerHTML = `<h3>Welcome</h3>
+                              <h5>Username:</h5> <p id ="username">${docSnap.data().username}</p>
+                              <img src=${docSnap.data().profile_picture} alt='User profile picture'>`
+        document.getElementById("getquiz").addEventListener("click", getQuiz)
+        document.getElementById("results").addEventListener("click", getScores)
+      
       } else {
         console.log("No such document!");
-    }})
+      }
+    })
     .catch((error) => {
-      document.getElementById('msgerr').innerHTML='Invalid user or password';
+      document.getElementById('msgerr').innerHTML = 'Invalid user or password';
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log('Código del error: ' + errorCode);
       console.log('Mensaje del error: ' + errorMessage);
+    }).finally(() => {
+      document.getElementById("log-loader").style.visibility = "hidden";
     });
 })
 
@@ -105,8 +172,7 @@ loginForm.addEventListener('submit', async (e) => {
 logout.addEventListener('click', () => {
   signOut(auth).then(() => {
     console.log('Logout user')
-    userData.style.cssText = '';
-    userData.innerHTML = ``;
+    location.reload();
   }).catch((error) => {
     console.log('Error: ', error)
   });
@@ -114,16 +180,17 @@ logout.addEventListener('click', () => {
 
 //Observe the user's state
 auth.onAuthStateChanged(user => {
-  if(user){
+  if (user) {
     console.log('Logged user');
-  }else{
+  } else {
     console.log('No logged user');
   }
 })
 
 
 //variables
-  const api = 'https://opentdb.com/api.php?amount=10&category=14&difficulty=medium&type=multiple' 
+
+  const api = 'https://opentdb.com/api.php?amount=10&category=14&type=multiple' 
   
   const preguntas = [] 
   const correctas =[]
@@ -133,9 +200,7 @@ auth.onAuthStateChanged(user => {
   let score = 0;
   let alerta = 0;
   let numbers = [0,1,2,3]
-
   
-
   //conseguir preguntas random
   function caos(array) {
       array.sort(() => Math.random() - 0.5);
@@ -170,78 +235,79 @@ auth.onAuthStateChanged(user => {
       </fieldset>
       <button id="next">NEXT</button>
       <input type="submit" id="finish" value="Finish quiz"></input>
-      ` 
-      if(i<9){
-          document.getElementById("finish").style.display = "none"
-      }
-      document.querySelector("#next").addEventListener("click", comprobarYPasar);
-      document.querySelector("#finish").addEventListener("click", validar)
+      `
+  if (i < 9) {
+    document.getElementById("finish").style.display = "none"
   }
-  
-  
-  
-   //Llamar al quiz
-  async function getQuiz() {
-  
-      let response = await fetch(api);
-      let data = await response.json();
-  
-      for(let i=0; i< data.results.length; i++){     
-        
-          preguntas.push(data.results[i].question)                         
-          correctas.push(data.results[i].correct_answer)
-          mezcladas.push(data.results[i].incorrect_answers.concat(data.results[i].correct_answer))    
-          
-      }
-        pintar(preguntas[i], mezcladas[i], i)  
-        
-      }
-    
-  
-  //sumar puntos y pasar pregunta
-  
-      function comprobarYPasar(event){
-          event.preventDefault();
-          const respuestaUsuario = document.querySelector(`input[name=n${i}]:checked`).value
-          console.log("respuestaUsuario es " + respuestaUsuario)
-  
-          if (respuestaUsuario == correctas[i]){
-              score++
-              finales.push(respuestaUsuario)
-          } else if (respuestaUsuario != correctas[i]){
-              alerta++
-              finales.push(respuestaUsuario)
-          }
-          i++
-          pintar(preguntas[i], mezcladas[i], i)
-        
-          if(i==9){
-              document.querySelector("#next").remove()
-          }
-  }
-  
-  // validar quiz
-    function validar(event){
-      event.preventDefault();
 
-      const respuestaUsuario = document.querySelector(`input[name=n${i}]:checked`).value
-      if (respuestaUsuario == correctas[i]){
-        score++
-        finales.push(respuestaUsuario)
-    } else if (respuestaUsuario != correctas[i]){
-        alerta++
-        finales.push(respuestaUsuario)
+  document.querySelector("#next").addEventListener("click", comprobarYPasar);
+  document.querySelector("#finish").addEventListener("click", validar)
+}
+
+
+
+//Llamar al quiz
+async function getQuiz() {
+  document.getElementById("quiz-loader").style.visibility = "visible";
+  let response = await fetch(api);
+  let data = await response.json();
+
+  for (let i = 0; i < data.results.length; i++) {
+
+    preguntas.push(data.results[i].question)
+    correctas.push(data.results[i].correct_answer)
+    mezcladas.push(data.results[i].incorrect_answers.concat(data.results[i].correct_answer))
+
+  }
+  document.getElementById("quiz-loader").style.visibility = "hidden";
+  pintar(preguntas[i], mezcladas[i], i)
+
+}
+
+//sumar puntos y pasar pregunta
+
+function comprobarYPasar(event) {
+  event.preventDefault();
+  const respuestaUsuario = document.querySelector(`input[name=n${i}]:checked`).value
+  console.log("respuestaUsuario es " + respuestaUsuario)
+
+  if (respuestaUsuario == correctas[i]) {
+    score++
+    finales.push(respuestaUsuario)
+  } else if (respuestaUsuario != correctas[i]) {
+    alerta++
+    finales.push(respuestaUsuario)
+  }
+  i++
+  setTimeout(() => {
+    pintar(preguntas[i], mezcladas[i], i)
+    if(i==9){
+      document.querySelector("#next").remove()
     }
+  }, 1000);
 
-      console.log(finales)
+}
 
-      document.getElementById("quiz").remove()
+// validar quiz
+function validar(event) {
+  event.preventDefault();
 
-      let contenedor = document.getElementById("test")
-      let aviso = document.createElement("article")
-      
-      aviso.innerHTML=
-      `<p>You answered ${score} questions correctly.<br>
+  const respuestaUsuario = document.querySelector(`input[name=n${i}]:checked`).value
+  if (respuestaUsuario == correctas[i]) {
+    score++
+    finales.push(respuestaUsuario)
+  } else if (respuestaUsuario != correctas[i]) {
+    alerta++
+    finales.push(respuestaUsuario)
+  }
+
+  document.getElementById("quiz").remove()
+
+  let contenedor = document.getElementById("test")
+  let aviso = document.createElement("article")
+
+  aviso.innerHTML =
+    `<p>You answered ${score} questions correctly.<br>
       <br>
       These are the questions's correct answers:</p>
       
@@ -266,31 +332,43 @@ auth.onAuthStateChanged(user => {
       <br>
       <li id="a9">Question: ${preguntas[9]},<br> correct answer: ${correctas[9]} ,<br> your answer: ${finales[9]}</li>
       </ol>
-      <button id="grafica">My scores</button>
-      `
+      <button id="grafica">My scores</button>`
     
       contenedor.appendChild(aviso)
 
-for (let j = 0; j < correctas.length; j++) {
-  if(finales[j]==correctas[j]){
-    document.getElementById(`a${j}`).style.color = "green"
-  } else{
-    document.getElementById(`a${j}`).style.color = "red"
-  }
+    for (let j = 0; j < correctas.length; j++) {
+      if(finales[j]==correctas[j]){
+        document.getElementById(`a${j}`).style.color = "green"
+      } else{
+        document.getElementById(`a${j}`).style.color = "red"
+      }
+      
+    }
+    
+  const userRef = doc(db, 'users', auth.currentUser.email);
+
+  getDoc(userRef).then((doc) => {
+   
+    const puntuaciones = doc.data().puntuacion || [];
   
-}
-console.log(alerta)
+    puntuaciones.push(score);
 
-
+    updateDoc(userRef, {
+      puntuacion: puntuaciones
+    }).then(() => {
+      console.log("Document successfully updated!");
+    }).catch((error) => {
+      console.error("Error updating document: ", error);
+    });
+  });
 
   document.getElementById("grafica").addEventListener("click", generarGrafica)
-
-
 }
+
   //GRAFICA//
 
   function generarGrafica(){
-
+    document.getElementById("chart").style.visibility="visible";
     let series = [score, alerta];
     let labels = ["correct", "incorrect"];
     let data = {
@@ -299,8 +377,6 @@ console.log(alerta)
     };
   
     var options = {
-        width: 500,
-        height: 400,
         high: 10,
         axisY: {
           onlyInteger: true
@@ -311,4 +387,46 @@ console.log(alerta)
 
 
     new Chartist.Bar(barras, data, options);
+    document.getElementById("grafica").remove()
+
   }
+
+
+  async function getScores(event){
+    event.preventDefault()
+ 
+    document.getElementById("progress").style.visibility="visible";
+  
+    let lineas = document.getElementById("chart2")
+  console.log(auth.currentUser.email)
+    const docRef = doc(db, 'users', auth.currentUser.email);
+    
+    try {
+      const doc = await getDoc(docRef);
+      console.log(doc, docRef, doc.data())
+      if (doc.exists()) {
+  
+        let intentos = doc.data().puntuacion.map((elemento, indice) => indice+1);
+  
+        var data = {
+          labels: intentos,
+          series: [doc.data().puntuacion]
+        };
+        var options = {
+          high: 10,
+          axisY: {
+            onlyInteger: true
+       }
+      };
+        
+        new Chartist.Line(lineas, data, options);
+    
+      } else {
+          console.log("El documento no existe.");
+      }
+    } catch (error) {
+      console.error("Error al obtener el documento: ", error);
+    }
+  
+  }
+

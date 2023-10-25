@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TeleQuiz</title>
-    <link rel="shortcut icon" href="/tvretro-removebg-preview.png" type="image/tv">
+    <link rel="shortcut icon" href="./assets/tvretro-removebg-preview.png" type="image/tv">
     <link rel="stylesheet" href="style.css">
     <link href='https://fonts.googleapis.com/css?family=Pixelify Sans' rel='stylesheet'>
     <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
 <body>
     <header>
-        <h2>Firebase Authentication</h2>
+        <h2>TeleQuiz</h2>
+        <div id="user-data"></div>
     </header>
     <main>
         <section id="inicio">
@@ -20,17 +21,19 @@
                 <fieldset>
                     <label for="email">Email:</label><br>
                     <input type="email" id="email" name="email" placeholder="Introduce email..."><br>
-                    <label for="signup-user">User name: </label> <br>
+                    <label for="signup-user">Username: </label> <br>
                     <input type="text" id="signup-user" name="signup-user" placeholder ="Username"><br>
                     <label for="pass">Password:</label><br>
                     <input type="password" id="pass" name="pass" placeholder="Introduce password..."><br>
-                    <label for="pass2">Repite password:</label><br>
-                    <input type="password" id="pass2" name="pass2" placeholder="Repite password..."><br><br>
-                    <input type="submit" value="Create" id="create">
+                    <label for="pass2">Repeat password:</label><br>
+                    <input type="password" id="pass2" name="pass2" placeholder="Repite password..."><br>
+                    <label for="signup-picture">Picture: </label><br>
+                    <input type="file" id="signup-picture" accept="image/*" name="signup-picture"><br><br>
+                    <input type="submit" value="Create" id="create">   
+                    <span class="loader" id="sign-loader"></span>               
                 </fieldset>
             </form>
-
-            
+           
             <form id ="form2" action="#" method="POST">
                 <h3>Log in</h3>
                 <fieldset>
@@ -38,28 +41,35 @@
                     <input type="email" id="email2" name="email2" placeholder="Introduce email..."><br>
                     <label for="pass3">Password:</label><br>
                     <input type="password" id="pass3" name="pass3" placeholder="Introduce password..."><br>
-                    <input type="submit" value="Log in" id="log">
+                    <input type="submit" value="Log in" id="log">            
+                    <span class="loader" id="log-loader"></span>
                 </fieldset>
             </form>
             <p id="msgerr"></p>
-            <div id="botones"></div>
         </section>
+
+        <div id="botones"></div>
+        <span class="loader" id="quiz-loader"></span>  
     
         <section id="test">
             <form id="quiz">
             </form>
-           
         </section>
- 
-        <div class='.ct-chart' id="chart"></div>
-    
+
+        <section id="progress">
+            <div id="history">
+                <div class='.ct-chart' id="chart"></div>
+                <div class='.ct-chart' id="chart2"></div>
+            </div>
+        </section>
+
     </main>
     <footer>
         <div id="logout-container">
             <button id="salir">Log out</button>
         </div>
-
     </footer>
+
 <!-- The core Firebase JS SDK is always required and must be listed first -->
 <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
 <!-- TODO: Add SDKs for Firebase products that you want to use
@@ -67,6 +77,5 @@
 <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-auth.js"></script>
 <script src="script.js" type="module"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>  
 </body>
 </html>
