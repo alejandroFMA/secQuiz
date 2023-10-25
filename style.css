@@ -61,9 +61,11 @@ input{
 }
 
 article{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     color: white;
 }
-
 
 button{
     color: rgb(2, 237, 2);
@@ -80,11 +82,6 @@ button:active{
     background-color: greenyellow;;
 }
 
-article{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
 
 fieldset.question{
     padding: 0.9em;
@@ -133,21 +130,14 @@ div.form{
     justify-content: space-around;
 }
 
-#msgerr{
-    color: red;
-}
-
 #botones{
     text-align: center;
 }
 
-#logout-container{
-    position:fixed;
-    bottom:0.45em;
-    right: 0.45em;
-    padding: 0.45em;
-    border-radius: 0.23em;
+#msgerr{
+    color: red;
 }
+
 
 #form1, #form2{
     text-align: center;
@@ -165,6 +155,13 @@ div.form{
     background-color: white;
 }
 
+#logout-container{
+    position:fixed;
+    bottom:0.45em;
+    right: 0.45em;
+    padding: 0.45em;
+    border-radius: 0.23em;
+}
 
 #user-data{
     border: dashed 1px yellowgreen;
@@ -174,25 +171,16 @@ div.form{
     width:50%;
     margin: auto;
 }
-#user-data > img{
-    width: 25%;
-    margin-bottom: 20px;
-    border-radius: 80px;
-}
-
 
 #username{
     color:orange;
 }
 
-#history p{
-    color: yellow;
+#user-data > img{
+    width: 25%;
+    margin-bottom: 20px;
+    border-radius: 80px;
 }
-
-#tabla p{
-    color: #ff00ff;
-}
-
 
 #log, #create, #finish{
     color: yellow;
@@ -276,7 +264,6 @@ div.form{
 #log-loader{
     margin-top: 25px;
 }
-
 
 @media only screen and (max-width: 965px) {
     /*index*/

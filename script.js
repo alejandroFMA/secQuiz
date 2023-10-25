@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
 import { getFirestore, collection, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-storage.js";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -44,7 +44,7 @@ function validateUser(user1) {
 }
 
 function validatePassword(password) {
-  let passFormat = /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/; //una mayuscula, una minuscula, un numero y uncaracter especial
+  let passFormat = /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{7,})\S$/; //una mayuscula, una minuscula, un numero y uncaracter especial
   return passFormat.test(password);
 }
 
@@ -60,7 +60,7 @@ auth.onAuthStateChanged(user => {
 //SignUp function
 signUpForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  document.getElementById("sign-loader").style.visibility = "visible";    
+  document.getElementById("sign-loader").style.visibility = "visible";
   const signUpEmail = document.getElementById('email').value;
   const signUpPassword = document.getElementById('pass').value;
   const signUpUser = document.getElementById('signup-user').value;
@@ -68,7 +68,7 @@ signUpForm.addEventListener('submit', async (e) => {
   const signUpImg = document.getElementById('signup-picture').files[0];
   const storageRef = ref(storage, signUpImg.name);
   let publicImageUrl;
-  
+
   if (!validateEmail(signUpEmail)) {
     alert("Has ingresado una dirección de correo electrónico inválida.");
     return;
@@ -87,17 +87,17 @@ signUpForm.addEventListener('submit', async (e) => {
   try {
     //Create auth user
     await createUserWithEmailAndPassword(auth, signUpEmail, signUpPassword)
-    .then((userCredential) => {
-      console.log('User registered')
-      const user = userCredential.user;
-      
-      signUpForm.reset();
-      document.getElementById("sign-loader").style.visibility = "hidden";    
-    })
+      .then((userCredential) => {
+        console.log('User registered')
+        const user = userCredential.user;
+
+        signUpForm.reset();
+        document.getElementById("sign-loader").style.visibility = "hidden";
+      })
     //Upload file to cloud storage
     await uploadBytes(storageRef, signUpImg).then(async (snapshot) => {
       console.log('Uploaded a blob or file!')
-      publicImageUrl= await getDownloadURL(storageRef);
+      publicImageUrl = await getDownloadURL(storageRef);
     })
     //Create document in DB
     await setDoc(doc(usersRef, signUpEmail), {
@@ -109,8 +109,8 @@ signUpForm.addEventListener('submit', async (e) => {
   } catch (error) {
     console.log('Error: ', error)
   }
-    
-  }); 
+
+});
 
 
 //Login function
@@ -142,19 +142,23 @@ loginForm.addEventListener('submit', async (e) => {
     })
     .then(() => {
       if (docSnap.exists()) {
-        document.getElementById("inicio").style.display="none";
-         botones.innerHTML = `<button id="getquiz">Go to quiz</button>
-                              <button id="results">My history</button>`
+
+        document.getElementById("inicio").style.display = "none";
+        botones.innerHTML = `
+                        <button id="getquiz">Go to quiz</button>
+                        <button id="results">My history</button>`
         userData.innerHTML = `<h3>Welcome</h3>
                               <h5>Username:</h5> <p id ="username">${docSnap.data().username}</p>
                               <img src=${docSnap.data().profile_picture} alt='User profile picture'>`
-          document.getElementById("getquiz").addEventListener("click", getQuiz)
-          document.getElementById("results").addEventListener("click", getScores)
+        document.getElementById("getquiz").addEventListener("click", getQuiz)
+        document.getElementById("results").addEventListener("click", getScores)
+      
       } else {
         console.log("No such document!");
-    }})
+      }
+    })
     .catch((error) => {
-      document.getElementById('msgerr').innerHTML='Invalid user or password';
+      document.getElementById('msgerr').innerHTML = 'Invalid user or password';
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log('Código del error: ' + errorCode);
@@ -176,15 +180,16 @@ logout.addEventListener('click', () => {
 
 //Observe the user's state
 auth.onAuthStateChanged(user => {
-  if(user){
+  if (user) {
     console.log('Logged user');
-  }else{
+  } else {
     console.log('No logged user');
   }
 })
 
 
 //variables
+
   const api = 'https://opentdb.com/api.php?amount=10&category=14&type=multiple' 
   
   const preguntas = [] 
@@ -195,8 +200,6 @@ auth.onAuthStateChanged(user => {
   let score = 0;
   let alerta = 0;
   let numbers = [0,1,2,3]
-
-
   
   //conseguir preguntas random
   function caos(array) {
@@ -232,79 +235,79 @@ auth.onAuthStateChanged(user => {
       </fieldset>
       <button id="next">NEXT</button>
       <input type="submit" id="finish" value="Finish quiz"></input>
-      ` 
-      if(i<9){
-          document.getElementById("finish").style.display = "none"
-      }
-      document.querySelector("#next").addEventListener("click", comprobarYPasar);
-      document.querySelector("#finish").addEventListener("click", validar)
+      `
+  if (i < 9) {
+    document.getElementById("finish").style.display = "none"
   }
-  
-  
-  
-   //Llamar al quiz
-  async function getQuiz() {
-    document.getElementById("progress").style.visibility="hidden";
-    document.getElementById("test").style.display= "flex";
-    document.getElementById("quiz-loader").style.visibility = "visible";
-      let response = await fetch(api);
-      let data = await response.json();
-  
-      for(let i=0; i< data.results.length; i++){     
-        
-          preguntas.push(data.results[i].question)                         
-          correctas.push(data.results[i].correct_answer)
-          mezcladas.push(data.results[i].incorrect_answers.concat(data.results[i].correct_answer))    
-          
-      }
-      document.getElementById("quiz-loader").style.visibility = "hidden";    
-        pintar(preguntas[i], mezcladas[i], i)  
-        
-      }
-    
-  
-  //sumar puntos y pasar pregunta
-  
-      function comprobarYPasar(event){
-          event.preventDefault();
-          const respuestaUsuario = document.querySelector(`input[name=n${i}]:checked`).value
-  
-          if (respuestaUsuario == correctas[i]){
-              score++
-              finales.push(respuestaUsuario)
-          } else if (respuestaUsuario != correctas[i]){
-              alerta++
-              finales.push(respuestaUsuario)
-          }
-          i++
-          setTimeout(() => {
-            pintar(preguntas[i], mezcladas[i], i)
-            if(i==9){
-              document.querySelector("#next").remove()
-            }
-          }, 1000);
-  }
-  
-  // validar quiz
-   function validar(event){
-      event.preventDefault();
 
-      const respuestaUsuario = document.querySelector(`input[name=n${i}]:checked`).value
-      if (respuestaUsuario == correctas[i]){
-        score++
-        finales.push(respuestaUsuario)
-    } else if (respuestaUsuario != correctas[i]){
-        alerta++
-        finales.push(respuestaUsuario)
+  document.querySelector("#next").addEventListener("click", comprobarYPasar);
+  document.querySelector("#finish").addEventListener("click", validar)
+}
+
+
+
+//Llamar al quiz
+async function getQuiz() {
+  document.getElementById("quiz-loader").style.visibility = "visible";
+  let response = await fetch(api);
+  let data = await response.json();
+
+  for (let i = 0; i < data.results.length; i++) {
+
+    preguntas.push(data.results[i].question)
+    correctas.push(data.results[i].correct_answer)
+    mezcladas.push(data.results[i].incorrect_answers.concat(data.results[i].correct_answer))
+
+  }
+  document.getElementById("quiz-loader").style.visibility = "hidden";
+  pintar(preguntas[i], mezcladas[i], i)
+
+}
+
+//sumar puntos y pasar pregunta
+
+function comprobarYPasar(event) {
+  event.preventDefault();
+  const respuestaUsuario = document.querySelector(`input[name=n${i}]:checked`).value
+  console.log("respuestaUsuario es " + respuestaUsuario)
+
+  if (respuestaUsuario == correctas[i]) {
+    score++
+    finales.push(respuestaUsuario)
+  } else if (respuestaUsuario != correctas[i]) {
+    alerta++
+    finales.push(respuestaUsuario)
+  }
+  i++
+  setTimeout(() => {
+    pintar(preguntas[i], mezcladas[i], i)
+    if(i==9){
+      document.querySelector("#next").remove()
     }
-    
-      document.getElementById("quiz").remove()
+  }, 1000);
 
-      let contenedor = document.getElementById("test")
-      let aviso = document.createElement("article")
-      
-      aviso.innerHTML=
-      `<p>You answered ${score} questions correctly.<br>
+}
+
+// validar quiz
+function validar(event) {
+  event.preventDefault();
+
+  const respuestaUsuario = document.querySelector(`input[name=n${i}]:checked`).value
+  if (respuestaUsuario == correctas[i]) {
+    score++
+    finales.push(respuestaUsuario)
+  } else if (respuestaUsuario != correctas[i]) {
+    alerta++
+    finales.push(respuestaUsuario)
+  }
+
+  document.getElementById("quiz").remove()
+
+  let contenedor = document.getElementById("test")
+  let aviso = document.createElement("article")
+
+  aviso.innerHTML =
+    `<p>You answered ${score} questions correctly.<br>
       <br>
       These are the questions's correct answers:</p>
       
@@ -362,7 +365,6 @@ auth.onAuthStateChanged(user => {
   document.getElementById("grafica").addEventListener("click", generarGrafica)
 }
 
-
   //GRAFICA//
 
   function generarGrafica(){
@@ -388,6 +390,7 @@ auth.onAuthStateChanged(user => {
     document.getElementById("grafica").remove()
 
   }
+
 
   async function getScores(event){
     event.preventDefault()
@@ -426,3 +429,4 @@ auth.onAuthStateChanged(user => {
     }
   
   }
+
