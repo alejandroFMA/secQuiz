@@ -33,7 +33,7 @@ const botones = document.getElementById('botones');
 const userData = document.getElementById('user-data');
 
 function validateEmail(email) {
-  let mailformat = /^[\w-_\.]+@([\w-]+\.)+[\w-]{2,4}$/; //letras y numeros guiones y dos o 4 letras al final
+  let mailformat = /^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/; //letras y numeros guiones y dos o 4 letras al final
   return mailformat.test(email);
 }
 
