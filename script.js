@@ -401,7 +401,6 @@ document.getElementById("grafica").addEventListener("click", generarGrafica)
 
   }
 
-<<<<<<< HEAD
 function getScores(){
   document.getElementById("test").style.visibility="hidden";
   document.getElementById("progress").style.visibility="visible";
@@ -423,6 +422,4 @@ function getRank(){
 
 
 }
-=======
 
->>>>>>> 29578b138551f9c2717b93e73120eb72ea9682e7
