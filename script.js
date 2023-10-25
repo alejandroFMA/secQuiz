@@ -32,6 +32,21 @@ const logout = document.getElementById('salir');
 const botones = document.getElementById('botones');
 const userData = document.getElementById('user-data');
 
+function validateEmail(email) {
+  let mailformat = /^[\w-_\.]+@([\w-]+\.)+[\w-]{2,4}$/; //letras y numeros guiones y dos o 4 letras al final
+  return mailformat.test(email);
+}
+
+function validateUser(user1) {
+  let mailformat = /^[A-Za-z0-9_-]{1,8}$/; // de 1 a 8 caracteres, alfanumérico
+  return mailformat.test(user1);
+}
+
+function validatePassword(password) {
+  let passFormat = /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/; //una mayuscula, una minuscula, un numero y uncaracter especial
+  return passFormat.test(password);
+}
+
 //SignUp function
 signUpForm.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -43,12 +58,29 @@ signUpForm.addEventListener('submit', async (e) => {
   const signUpImg = document.getElementById('signup-picture').files[0];
   const storageRef = ref(storage, signUpImg.name);
   let publicImageUrl;
+  
+  if (!validateEmail(signUpEmail)) {
+    alert("Has ingresado una dirección de correo electrónico inválida.");
+    return;
+  }
+
+  if (!validateUser(signUpUser)) {
+    alert("Has ingresado un user inválido");
+    return;
+  }
+
+  if (!validatePassword(signUpPassword)) {
+    alert("Has ingresado un password inválido.");
+    return;
+  }
+
   try {
     //Create auth user
     await createUserWithEmailAndPassword(auth, signUpEmail, signUpPassword)
     .then((userCredential) => {
       console.log('User registered')
       const user = userCredential.user;
+      
       signUpForm.reset();
       document.getElementById("sign-loader").style.visibility = "hidden";    
     })
@@ -82,6 +114,16 @@ loginForm.addEventListener('submit', async (e) => {
   //Search a document that matches with our ref
   const docSnap = await getDoc(docRef);
 
+  if (!validateEmail(loginEmail)) {
+    alert("Has ingresado una dirección de correo electrónico inválida.");
+    return;
+  }
+
+  if (!validatePassword(loginPassword)) {
+    alert("Has ingresado un password inválido.");
+    return;
+  }
+
   signInWithEmailAndPassword(auth, loginEmail, loginPassword)
     .then((userCredential) => {
       console.log('User authenticated')
@@ -93,19 +135,14 @@ loginForm.addEventListener('submit', async (e) => {
         document.getElementById("inicio").style.display="none";
          botones.innerHTML = `
                         <button id="getquiz">Go to quiz</button>
-                        <button id="results">My history</button>`
+                        <button id="results">My history</button>
+                        <button id="ranking">Top 5</button>`
         userData.innerHTML = `<h3>Welcome</h3>
                               <h5>Username:</h5> <p id ="username">${docSnap.data().username}</p>
                               <img src=${docSnap.data().profile_picture} alt='User profile picture'>`
-           document.getElementById("getquiz").addEventListener("click", function () {
-            getQuiz()
-             
-            })
-
-            document.getElementById("results").addEventListener("click", function () {
-              getScores()
-               
-              })
+          document.getElementById("getquiz").addEventListener("click", getQuiz)
+          document.getElementById("results").addEventListener("click", getScores)
+          document.getElementById("ranking").addEventListener("click", getRank)
       } else {
         console.log("No such document!");
     }})
@@ -153,8 +190,25 @@ auth.onAuthStateChanged(user => {
   let numbers = [0,1,2,3]
 
 
-  
+  async function getPoints (){
+    const docRef = doc(db, 'users', 'alex2@hotmail.com');
+    
+    try {
+        const doc = await getDoc(docRef);
+        if (doc.exists()) {
+            console.log(doc.data());
+        } else {
+            console.log("El documento no existe.");
+        }
+    } catch (error) {
+        console.error("Error al obtener el documento: ", error);
+    }
 
+  }
+
+  document.getElementById("results").addEventListener("click", getPoints());
+
+  
   //conseguir preguntas random
   function caos(array) {
       array.sort(() => Math.random() - 0.5);
@@ -301,6 +355,7 @@ for (let j = 0; j < correctas.length; j++) {
   
 }
 
+
 console.log(alerta);
 
 const userRef = doc(db, 'users', auth.currentUser.email);
@@ -317,9 +372,7 @@ const userRef = doc(db, 'users', auth.currentUser.email);
 
 document.getElementById("grafica").addEventListener("click", generarGrafica)
 
-
 }
-
 
   //GRAFICA//
 
@@ -345,4 +398,5 @@ document.getElementById("grafica").addEventListener("click", generarGrafica)
     document.getElementById("grafica").remove()
 
   }
+
 

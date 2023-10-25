@@ -160,9 +160,11 @@ div.form{
     padding: 50px 70px;
 }
 
+
 #signup-picture{
     background-color: white;
 }
+
 
 #user-data{
     border: dashed 1px yellowgreen;
@@ -218,7 +220,6 @@ div.form{
 }
 
 
-
 .loader {
     font-size: 10px;
     width: 1em;
@@ -262,7 +263,6 @@ div.form{
 #log-loader{
     margin-top: 25px;
 }
-
 
 
 @media only screen and (max-width: 965px) {
