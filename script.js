@@ -248,6 +248,8 @@ auth.onAuthStateChanged(user => {
 
 //Llamar al quiz
 async function getQuiz() {
+  document.getElementById("test").style.display = "block"
+  document.getElementById("progress").style.visibility ="hidden"
   document.getElementById("quiz-loader").style.visibility = "visible";
   let response = await fetch(api);
   let data = await response.json();
@@ -394,7 +396,7 @@ function validar(event) {
 
   async function getScores(event){
     event.preventDefault()
- 
+    document.getElementById("test").style.display ="none"
     document.getElementById("progress").style.visibility="visible";
   
     let lineas = document.getElementById("chart2")
