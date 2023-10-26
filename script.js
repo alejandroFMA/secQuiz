@@ -80,7 +80,7 @@ signUpForm.addEventListener('submit', async (e) => {
   }
 
   if (!validatePassword(signUpPassword)) {
-    alert("Has ingresado un password inválido.");
+    alert("Password must include at least a number, an uppercase and a lowercase letter. Only alphanumeric passwords, minimum of 8 char.");
     return;
   }
 
